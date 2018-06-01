@@ -92,13 +92,13 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
     // TODO: Rename and change types of parameters
     protected String mUrl;
     protected int mType;
-    protected EasyPlayerClient mStreamRender;
+    public  EasyPlayerClient mStreamRender;
     protected ResultReceiver mResultReceiver;
     protected int mWidth;
     protected int mHeight;
     protected View.OnLayoutChangeListener listener;
     private PhotoViewAttacher mAttacher;
-    protected  TextureView mSurfaceView;
+    public  TextureView mSurfaceView;
     private AngleView mAngleView;
     private MediaScannerConnection mScanner;
     private ImageView mRenderCover;

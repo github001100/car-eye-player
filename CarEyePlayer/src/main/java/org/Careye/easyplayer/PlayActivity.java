@@ -490,54 +490,14 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //mRenderFragment.mSurfaceView.setVisibility(View.GONE);
-                //onPlayStoped();
+                mRenderFragment.mStreamRender.stop();
             }
         });
         //播放
         mBinding.toolbarPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //onPlayStart();
-               /* url = mBinding.inputUrl.getText().toString();
-                ResultReceiver rr = getIntent().getParcelableExtra("rr");
-                if (rr == null) {
-                    rr = new ResultReceiver(new Handler()) {
-                        @Override
-                        protected void onReceiveResult(int resultCode, Bundle resultData) {
-                            super.onReceiveResult(resultCode, resultData);
-                            if (resultCode == PlayFragment.RESULT_REND_STARTED) {
-                                onPlayStart();
-                            } else if (resultCode == PlayFragment.RESULT_REND_STOPED) {
-                                onPlayStoped();
-                            } else if (resultCode == PlayFragment.RESULT_REND_VIDEO_DISPLAYED) {
-                                onVideoDisplayed();
-                            }
-                        }
-                    };
-                }
-                // useUDP = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.key_udp_mode), false);
-                PlayFragment fragment = PlayFragment.newInstance(url, useUDP ? Client.TRANSTYPE_UDP : Client.TRANSTYPE_TCP, rr);//创建PlayFragment 实例
-                getSupportFragmentManager().beginTransaction().add(R.id.render_holder, fragment).commit();
-                mRenderFragment = fragment;
-
-                //mRenderFragment = (PlayFragment) getSupportFragmentManager().findFragmentById(R.id.render_holder);
-
-                Toast.makeText(getApplicationContext(),url,Toast.LENGTH_LONG).show();*/
-
-            }
-        });
-        mBinding.btnPusher.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(PlayActivity.this, StreamActivity.class));
-            }
-        });
-        //播放器按钮
-        mBinding.btnPlayer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(PlayActivity.this, PlayActivity.class);
-                i.putExtra("play_url", mBinding.inputUrl.getText().toString());
+                //mRenderFragment.mStreamRender.resume();
 
                 url = mBinding.inputUrl.getText().toString();
                 ResultReceiver rr = getIntent().getParcelableExtra("rr");
@@ -564,6 +524,47 @@ public class PlayActivity extends AppCompatActivity {
                 //mRenderFragment = (PlayFragment) getSupportFragmentManager().findFragmentById(R.id.render_holder);
 
                 Toast.makeText(getApplicationContext(),url,Toast.LENGTH_LONG).show();
+
+            }
+        });
+        mBinding.btnPusher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PlayActivity.this, StreamActivity.class));
+            }
+        });
+        //播放器按钮
+        mBinding.btnPlayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PlayActivity.this, PlayActivity.class);
+                i.putExtra("play_url", mBinding.inputUrl.getText().toString());
+
+                /*url = mBinding.inputUrl.getText().toString();
+                ResultReceiver rr = getIntent().getParcelableExtra("rr");
+                if (rr == null) {
+                    rr = new ResultReceiver(new Handler()) {
+                        @Override
+                        protected void onReceiveResult(int resultCode, Bundle resultData) {
+                            super.onReceiveResult(resultCode, resultData);
+                            if (resultCode == PlayFragment.RESULT_REND_STARTED) {
+                                onPlayStart();
+                            } else if (resultCode == PlayFragment.RESULT_REND_STOPED) {
+                                onPlayStoped();
+                            } else if (resultCode == PlayFragment.RESULT_REND_VIDEO_DISPLAYED) {
+                                onVideoDisplayed();
+                            }
+                        }
+                    };
+                }
+                // useUDP = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.key_udp_mode), false);
+                PlayFragment fragment = PlayFragment.newInstance(url, useUDP ? Client.TRANSTYPE_UDP : Client.TRANSTYPE_TCP, rr);//创建PlayFragment 实例
+                getSupportFragmentManager().beginTransaction().add(R.id.render_holder, fragment).commit();
+                mRenderFragment = fragment;
+
+                //mRenderFragment = (PlayFragment) getSupportFragmentManager().findFragmentById(R.id.render_holder);
+
+                Toast.makeText(getApplicationContext(),url,Toast.LENGTH_LONG).show();*/
 
             }
         });
