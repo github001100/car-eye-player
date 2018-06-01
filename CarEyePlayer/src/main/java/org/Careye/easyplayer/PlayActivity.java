@@ -490,7 +490,7 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //mRenderFragment.mSurfaceView.setVisibility(View.GONE);
-                mRenderFragment.mStreamRender.stop();//停
+                mRenderFragment.mStreamRender.stop();//停止播放
             }
         });
         //播放
