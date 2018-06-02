@@ -60,9 +60,7 @@
         <FrameLayout
             android:id="@+id/render_holder"
             android:layout_width="match_parent"
-            android:layout_height="370dp"></FrameLayout>
-
-
+            android:layout_height="293dp"></FrameLayout>
 
         <LinearLayout
             android:id="@+id/player_container"

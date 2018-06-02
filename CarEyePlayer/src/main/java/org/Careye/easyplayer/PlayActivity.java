@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 
 import org.Careye.easyplayer.fragments.ImageFragment;
+import org.Careye.easyplayer.fragments.PushFragment;
 import org.Careye.push.StreamActivity;
 import org.Careye.video.Client;
 import org.Careye.easyplayer.fragments.PlayFragment;
@@ -444,6 +445,7 @@ public class PlayActivity extends AppCompatActivity {
             useUDP = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.key_udp_mode), false);
             PlayFragment fragment = PlayFragment.newInstance(url, useUDP ? Client.TRANSTYPE_UDP : Client.TRANSTYPE_TCP, rr);//创建PlayFragment 实例
             getSupportFragmentManager().beginTransaction().add(R.id.render_holder, fragment).commit();
+
             mRenderFragment = fragment;
         } else {
             mRenderFragment = (PlayFragment) getSupportFragmentManager().findFragmentById(R.id.render_holder);
@@ -527,10 +529,14 @@ public class PlayActivity extends AppCompatActivity {
 
             }
         });
+        //推流 按钮
         mBinding.btnPusher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PlayActivity.this, StreamActivity.class));
+                //startActivity(new Intent(PlayActivity.this, StreamActivity.class));
+                //mRenderFragment.onDetach();
+                getSupportFragmentManager().beginTransaction().add(R.id.render_holder, new PushFragment()).commit();
+
             }
         });
         //播放器按钮
@@ -539,7 +545,25 @@ public class PlayActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(PlayActivity.this, PlayActivity.class);
                 i.putExtra("play_url", mBinding.inputUrl.getText().toString());
-
+                ResultReceiver rr = getIntent().getParcelableExtra("rr");
+                if (rr == null) {
+                    rr = new ResultReceiver(new Handler()) {
+                        @Override
+                        protected void onReceiveResult(int resultCode, Bundle resultData) {
+                            super.onReceiveResult(resultCode, resultData);
+                            if (resultCode == PlayFragment.RESULT_REND_STARTED) {
+                                onPlayStart();
+                            } else if (resultCode == PlayFragment.RESULT_REND_STOPED) {
+                                onPlayStoped();
+                            } else if (resultCode == PlayFragment.RESULT_REND_VIDEO_DISPLAYED) {
+                                onVideoDisplayed();
+                            }
+                        }
+                    };
+                }
+                PlayFragment fragment = PlayFragment.newInstance(url, useUDP ? Client.TRANSTYPE_UDP : Client.TRANSTYPE_TCP, rr);//创建PlayFragment 实例
+                getSupportFragmentManager().beginTransaction().add(R.id.render_holder, fragment).commit();
+                //fragment.onDestroy();
                 /*url = mBinding.inputUrl.getText().toString();
                 ResultReceiver rr = getIntent().getParcelableExtra("rr");
                 if (rr == null) {
