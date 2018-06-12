@@ -17,7 +17,7 @@ import android.widget.Toast;
 import org.Careye.easyplayer.TheApp;
 import org.Careye.easyplayer.views.OverlayCanvasView;
 import org.Careye.video.Client;
-import org.Careye.video.EasyPlayerClient;
+import org.Careye.video.CarEyePlayerClient;
 import org.Careye.rtsp.player.R;
 
 import java.io.File;
@@ -30,7 +30,7 @@ import java.util.Date;
  * Created by apple on 2017/12/30.
  */
 
-public class YUVExportFragment extends PlayFragment implements EasyPlayerClient.I420DataCallback {
+public class YUVExportFragment extends PlayFragment implements CarEyePlayerClient.I420DataCallback {
 
     OverlayCanvasView canvas;
     public static YUVExportFragment newInstance(String url, int type, ResultReceiver rr) {
@@ -55,7 +55,7 @@ public class YUVExportFragment extends PlayFragment implements EasyPlayerClient.
 
     @Override
     protected void startRending(SurfaceTexture surface) {
-        mStreamRender = new EasyPlayerClient(getContext(), KEY, new Surface(surface), mResultReceiver, this);
+        mStreamRender = new CarEyePlayerClient(getContext(), KEY, new Surface(surface), mResultReceiver, this);
 
         boolean autoRecord = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("auto_record", false);
 
@@ -63,7 +63,7 @@ public class YUVExportFragment extends PlayFragment implements EasyPlayerClient.
         f.mkdirs();
 
         try {
-            mStreamRender.start(mUrl, mType, Client.EASY_SDK_VIDEO_FRAME_FLAG | Client.EASY_SDK_AUDIO_FRAME_FLAG, "", "", autoRecord ? new File(f, new SimpleDateFormat("yy-MM-dd HH:mm:ss").format(new Date()) + ".mp4").getPath() : null);
+            mStreamRender.start(mUrl, mType, Client.CAR_EYE_SDK_VIDEO_FRAME_FLAG | Client.CAR_EYE_SDK_AUDIO_FRAME_FLAG, "", "", autoRecord ? new File(f, new SimpleDateFormat("yy-MM-dd HH:mm:ss").format(new Date()) + ".mp4").getPath() : null);
         }catch (Exception e){
             e.printStackTrace();
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();

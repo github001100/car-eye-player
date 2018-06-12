@@ -23,7 +23,7 @@ public class AboutActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-            binding.title.setText("car-eye-player RTSP播放器：");//修改名称 测试2018
+            binding.title.setText("car-eye-player RTSP播放器：");//修改名称 测试
             binding.desc.setText("car-eye-player RTSP是由Car-Eye开源团队开发 者开发和维护的一个RTSP播放器项目，目前 支持Windows/Android/iOS，视频支持 H.264/H.265/MPEG4/MJPEG，音频支持 G711A/G711U/G726/AAC，支持RTSP over  TCP/UDP切换，支持硬解码，是一套极佳的 RTSP播放组件！项目地址：");
 
             binding.desc.setMovementMethod(LinkMovementMethod.getInstance());

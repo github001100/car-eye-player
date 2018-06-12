@@ -13,9 +13,7 @@ import java.nio.ByteOrder;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by John on 2016/3/12.
- */
+
 public class Client implements Closeable {
     private static int sKey;
     private volatile int paused = 0;
@@ -69,18 +67,6 @@ public class Client implements Closeable {
     }
 
     public static final class MediaInfo {
-//        Easy_U32 u32VideoCodec;				/*  ”∆µ±‡¬Î¿‡–Õ */
-//        Easy_U32 u32VideoFps;				/*  ”∆µ÷°¬  */
-//
-//        Easy_U32 u32AudioCodec;				/* “Ù∆µ±‡¬Î¿‡–Õ */
-//        Easy_U32 u32AudioSamplerate;		/* “Ù∆µ≤…—˘¬  */
-//        Easy_U32 u32AudioChannel;			/* “Ù∆µÕ®µ¿ ˝ */
-//        Easy_U32 u32AudioBitsPerSample;		/* “Ù∆µ≤…—˘æ´∂» */
-//
-//        Easy_U32 u32H264SpsLength;			/*  ”∆µsps÷°≥§∂» */
-//        Easy_U32 u32H264PpsLength;			/*  ”∆µpps÷°≥§∂» */
-//        Easy_U8	 u8H264Sps[128];			/*  ”∆µsps÷°ƒ⁄»› */
-//        Easy_U8	 u8H264Pps[36];				/*  ”∆µsps÷°ƒ⁄»› */
 
         int videoCodec;
         int fps;
@@ -118,19 +104,17 @@ public class Client implements Closeable {
     }
 
 
-    public static final int EASY_SDK_VIDEO_FRAME_FLAG = 0x01;
-    public static final int EASY_SDK_AUDIO_FRAME_FLAG = 0x02;
-    public static final int EASY_SDK_EVENT_FRAME_FLAG = 0x04;
-    public static final int EASY_SDK_RTP_FRAME_FLAG = 0x08;		/* RTP帧标志 */
-    public static final int EASY_SDK_SDP_FRAME_FLAG = 0x10;		/* SDP帧标志 */
-    public static final int EASY_SDK_MEDIA_INFO_FLAG = 0x20;		/* 媒体类型标志*/
-
-    public static final int EASY_SDK_EVENT_CODEC_ERROR = 0x63657272;	/* ERROR */
-    public static final int EASY_SDK_EVENT_CODEC_EXIT = 0x65786974;	/* EXIT */
-
+    public static final int CAR_EYE_SDK_VIDEO_FRAME_FLAG = 0x01;
+    public static final int CAR_EYE_SDK_AUDIO_FRAME_FLAG = 0x02;
+    public static final int CAR_EYE_SDK_EVENT_FRAME_FLAG = 0x04;
+    public static final int CAR_EYE_SDK_RTP_FRAME_FLAG = 0x08;		/* RTP帧标志 */
+    public static final int CAR_EYE_SDK_SDP_FRAME_FLAG = 0x10;		/* SDP帧标志 */
+    public static final int CAR_EYE_SDK_MEDIA_INFO_FLAG = 0x20;		/* 媒体类型标志*/
+    public static final int CAR_EYE_SDK_EVENT_CODEC_ERROR = 0x63657272;	/* ERROR */
+    public static final int CAR_EYE_SDK_EVENT_CODEC_EXIT = 0x65786974;	/* EXIT */
     public static final int TRANSTYPE_TCP = 1;
     public static final int TRANSTYPE_UDP = 2;
-    private static final String TAG = Client.class.getSimpleName();
+    private static final String TAG = "Car-eye-player";
 
     static {
         System.loadLibrary("Client");
@@ -146,9 +130,7 @@ public class Client implements Closeable {
         if (context == null) {
             throw new NullPointerException();
         }
-        Log.d("networklib", String.format("queue size : " ));
         mCtx = init(context, key);
-        Log.d("networklib", String.format("queue size1 : "));
         if (mCtx == 0 || mCtx == -1) {
             throw new IllegalArgumentException("初始化失败，KEY不合法！");
         }
@@ -190,12 +172,9 @@ public class Client implements Closeable {
             closeStream(mCtx);
         }
     }
-
     private static native int getErrorCode(long context);
-
     private native long init(Context context, String key);
-
-    private native int deInit(long context);
+    private native int DestoryStream(long handle);
 
     private int openStream() {
         if (null == _url) {
@@ -204,17 +183,12 @@ public class Client implements Closeable {
         if (mCtx == 0){
             throw new IllegalStateException("context is 0!");
         }
-
-        return openStream( _channel, _url, _type, _mediaType, _user, _pwd, 1000, 0);
+        return CreateStream( mCtx,_channel, _url, _type, _mediaType, 1000, 0);
     }
 
-    private native int openStream( int channel, String url, int type, int mediaType, String user, String pwd, int reconn, int outRtpPacket);
-
-//    private native int startRecord(int context, String path);
-//
-//    private native void stopRecord(int context);
-
+    private native int CreateStream( long handle,int channel, String url, int type, int mediaType, int reconn, int outRtpPacket);
     private native void closeStream(long context);
+    
     private   void onSourceCallBack(int _channelId, int _channelPtr, int _frameType, byte[] pBuf, byte[] frameBuffer) {
         final SourceCallBack callBack;
         Log.d(TAG, String.format("onSourceCallBack: _frameType" +_frameType+"pBuf"+pBuf[0]));
@@ -227,10 +201,9 @@ public class Client implements Closeable {
             }
             return;
         }
-        if (_frameType == EASY_SDK_MEDIA_INFO_FLAG) {
+        if (_frameType == CAR_EYE_SDK_MEDIA_INFO_FLAG) {
             if (callBack != null) {
                 MediaInfo mi = new MediaInfo();
-
                 ByteBuffer buffer = ByteBuffer.wrap(pBuf);
                 buffer.order(ByteOrder.LITTLE_ENDIAN);
                 mi.videoCodec = buffer.getInt();
@@ -243,16 +216,8 @@ public class Client implements Closeable {
                 mi.ppsLen = buffer.getInt();
                 mi.sps = new byte[128];
                 mi.pps = new byte[36];
-
                 buffer.get(mi.sps);
                 buffer.get(mi.pps);
-//                    int videoCodec;int fps;
-//                    int audioCodec;int sample;int channel;int bitPerSample;
-//                    int spsLen;
-//                    int ppsLen;
-//                    byte[]sps;
-//                    byte[]pps;
-
                 callBack.onMediaInfoCallBack(_channelId, mi);
             }
             return;
@@ -282,7 +247,7 @@ public class Client implements Closeable {
         fi.stamp = sec * 1000000 + usec;
 
 //        long differ = fi.stamp - mPreviewStamp;
-        Log.d(TAG, String.format("%s:%d,%d,%d", EASY_SDK_VIDEO_FRAME_FLAG == _frameType ? "视频" : "音频", fi.stamp, fi.timestamp_sec, fi.timestamp_usec));
+        Log.d(TAG, String.format("%s:%d,%d,%d", CAR_EYE_SDK_VIDEO_FRAME_FLAG == _frameType ? "视频" : "音频", fi.stamp, fi.timestamp_sec, fi.timestamp_usec));
         fi.buffer = pBuf;
 
         boolean paused = false;
@@ -343,7 +308,7 @@ public class Client implements Closeable {
         h.removeCallbacks(closeTask);
         _channelPause.remove(_channel);
         if (mCtx == 0) throw new IOException("not opened or already closed");
-        deInit(mCtx);
+        DestoryStream(mCtx);
         mCtx = 0;
     }
 }

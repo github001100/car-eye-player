@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
 
-import org.Careye.video.EasyPlayerClient;
+import org.Careye.video.CarEyePlayerClient;
 import org.Careye.easyplayer.PlayActivity;
 import org.Careye.easyplayer.PlaylistActivity;
 import org.Careye.rtsp.player.R;
@@ -97,7 +97,7 @@ public class PlayFragment2 extends PlayFragment implements SurfaceHolder.Callbac
             @Override
             protected void onReceiveResult(int resultCode, Bundle resultData) {
                 super.onReceiveResult(resultCode, resultData);
-                if (resultCode == EasyPlayerClient.RESULT_VIDEO_DISPLAYED) {
+                if (resultCode == CarEyePlayerClient.RESULT_VIDEO_DISPLAYED) {
 //                    Toast.makeText(PlayActivity.this, "视频正在播放了", Toast.LENGTH_SHORT).show();
                     view.findViewById(android.R.id.progress).setVisibility(View.GONE);
 //                    surfaceView.post(new Runnable() {
@@ -113,16 +113,16 @@ public class PlayFragment2 extends PlayFragment implements SurfaceHolder.Callbac
 //                        }
 //                    });
                     cover.setVisibility(View.GONE);
-                } else if (resultCode == EasyPlayerClient.RESULT_VIDEO_SIZE) {
-                    mWidth = resultData.getInt(EasyPlayerClient.EXTRA_VIDEO_WIDTH);
-                    mHeight = resultData.getInt(EasyPlayerClient.EXTRA_VIDEO_HEIGHT);
+                } else if (resultCode == CarEyePlayerClient.RESULT_VIDEO_SIZE) {
+                    mWidth = resultData.getInt(CarEyePlayerClient.EXTRA_VIDEO_WIDTH);
+                    mHeight = resultData.getInt(CarEyePlayerClient.EXTRA_VIDEO_HEIGHT);
                     if (!isLandscape()) {
 
                         ViewGroup parent = (ViewGroup) view.getParent();
                         parent.addOnLayoutChangeListener(listener);
                         fixPlayerRatio(view, parent.getWidth(), parent.getHeight());
                     }
-                } else if (resultCode == EasyPlayerClient.RESULT_TIMEOUT) {
+                } else if (resultCode == CarEyePlayerClient.RESULT_TIMEOUT) {
                     Toast.makeText(getActivity(), "试播时间到", Toast.LENGTH_SHORT).show();
                 }
             }

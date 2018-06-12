@@ -53,7 +53,7 @@ import org.Careye.video.Client;
 import org.Careye.easyplayer.fragments.PlayFragment;
 import org.Careye.rtsp.player.R;
 import org.Careye.rtsp.player.databinding.ActivityMainBinding;
-import org.Careye.video.EasyPlayerClient;
+import org.Careye.video.CarEyePlayerClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -532,7 +532,6 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //mRenderFragment.mStreamRender.resume();
-
                 url = mBinding.inputUrl.getText().toString();
                 ResultReceiver rr = getIntent().getParcelableExtra("rr");
                 if (rr == null) {

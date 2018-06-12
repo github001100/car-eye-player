@@ -40,7 +40,7 @@ import org.Careye.easyplayer.PlayActivity;
 import org.Careye.easyplayer.TheApp;
 import org.Careye.easyplayer.views.AngleView;
 import org.Careye.video.Client;
-import org.Careye.video.EasyPlayerClient;
+import org.Careye.video.CarEyePlayerClient;
 import org.Careye.easyplayer.PlaylistActivity;
 import org.Careye.rtsp.player.R;
 
@@ -92,7 +92,7 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
     // TODO: Rename and change types of parameters
     protected String mUrl;
     protected int mType;
-    public  EasyPlayerClient mStreamRender;
+    public CarEyePlayerClient mStreamRender;
     protected ResultReceiver mResultReceiver;
     protected int mWidth;
     protected int mHeight;
@@ -225,22 +225,22 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
                 super.onReceiveResult(resultCode, resultData);
                 Activity activity = getActivity();
                 if (activity == null)return;
-                if (resultCode == EasyPlayerClient.RESULT_VIDEO_DISPLAYED) {
+                if (resultCode == CarEyePlayerClient.RESULT_VIDEO_DISPLAYED) {
 
                     onVideoDisplayed();
-                } else if (resultCode == EasyPlayerClient.RESULT_VIDEO_SIZE) {
-                    mWidth = resultData.getInt(EasyPlayerClient.EXTRA_VIDEO_WIDTH);
-                    mHeight = resultData.getInt(EasyPlayerClient.EXTRA_VIDEO_HEIGHT);
+                } else if (resultCode == CarEyePlayerClient.RESULT_VIDEO_SIZE) {
+                    mWidth = resultData.getInt(CarEyePlayerClient.EXTRA_VIDEO_WIDTH);
+                    mHeight = resultData.getInt(CarEyePlayerClient.EXTRA_VIDEO_HEIGHT);
 
 
                     onVideoSizeChange();
-                } else if (resultCode == EasyPlayerClient.RESULT_TIMEOUT) {
+                } else if (resultCode == CarEyePlayerClient.RESULT_TIMEOUT) {
                     new AlertDialog.Builder(getActivity()).setMessage("试播时间到").setTitle("SORRY").setPositiveButton(android.R.string.ok, null).show();
-                } else if (resultCode == EasyPlayerClient.RESULT_UNSUPPORTED_AUDIO) {
+                } else if (resultCode == CarEyePlayerClient.RESULT_UNSUPPORTED_AUDIO) {
                     new AlertDialog.Builder(getActivity()).setMessage("音频格式不支持").setTitle("SORRY").setPositiveButton(android.R.string.ok, null).show();
-                } else if (resultCode == EasyPlayerClient.RESULT_UNSUPPORTED_VIDEO) {
+                } else if (resultCode == CarEyePlayerClient.RESULT_UNSUPPORTED_VIDEO) {
                     new AlertDialog.Builder(getActivity()).setMessage("视频格式不支持").setTitle("SORRY").setPositiveButton(android.R.string.ok, null).show();
-                }else if (resultCode == EasyPlayerClient.RESULT_EVENT){
+                }else if (resultCode == CarEyePlayerClient.RESULT_EVENT){
 
                     int errorcode = resultData.getInt("errorcode");
 //                    if (errorcode != 0){
@@ -249,10 +249,10 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
                     if (activity instanceof PlayActivity) {
                         ((PlayActivity)activity).onEvent(PlayFragment.this, errorcode, resultData.getString("event-msg"));
                     }
-                }else if (resultCode == EasyPlayerClient.RESULT_RECORD_BEGIN){
+                }else if (resultCode == CarEyePlayerClient.RESULT_RECORD_BEGIN){
                     if (activity instanceof PlayActivity)
                         ((PlayActivity)activity).onRecordState(1);
-                }else if (resultCode == EasyPlayerClient.RESULT_RECORD_END){
+                }else if (resultCode == CarEyePlayerClient.RESULT_RECORD_END){
                     if (activity instanceof PlayActivity)
                         ((PlayActivity)activity).onRecordState(-1);
                 }
@@ -443,7 +443,7 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
     }
 
     protected void startRending(SurfaceTexture surface) {
-        mStreamRender = new EasyPlayerClient(getContext(), KEY, new Surface(surface), mResultReceiver);
+        mStreamRender = new CarEyePlayerClient(getContext(), KEY, new Surface(surface), mResultReceiver);
 
         boolean autoRecord = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("auto_record", false);
 
@@ -451,7 +451,7 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
         f.mkdirs();
 
         try {
-            mStreamRender.start(mUrl, mType, Client.EASY_SDK_VIDEO_FRAME_FLAG | Client.EASY_SDK_AUDIO_FRAME_FLAG, "", "", autoRecord ? new File(f, new SimpleDateFormat("yy-MM-dd HH:mm:ss").format(new Date()) + ".mp4").getPath() : null);
+            mStreamRender.start(mUrl, mType, Client.CAR_EYE_SDK_VIDEO_FRAME_FLAG | Client.CAR_EYE_SDK_AUDIO_FRAME_FLAG, "", "", autoRecord ? new File(f, new SimpleDateFormat("yy-MM-dd HH:mm:ss").format(new Date()) + ".mp4").getPath() : null);
         }catch (Exception e){
             e.printStackTrace();
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
