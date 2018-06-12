@@ -1,9 +1,13 @@
 package org.Careye.easyplayer.fragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
@@ -13,14 +17,12 @@ import android.widget.RelativeLayout;
 
 import java.io.IOException;
 
-public class PushFragment extends Fragment implements TextureView.SurfaceTextureListener
-{
+public class PushFragment extends Fragment implements TextureView.SurfaceTextureListener {
     private Camera mCamera;
     private TextureView mTextureView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1200);
 
         LinearLayout view = new LinearLayout(getActivity());
@@ -31,21 +33,17 @@ public class PushFragment extends Fragment implements TextureView.SurfaceTexture
         mTextureView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1200));
 
         view.addView(mTextureView);
-
         return view;
     }
 
 
     @Override
-    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height)
-    {
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         mCamera = Camera.open();
-        try
-        {
+        try {
             mCamera.setPreviewTexture(surface);
             mCamera.startPreview();
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -54,22 +52,19 @@ public class PushFragment extends Fragment implements TextureView.SurfaceTexture
     }
 
     @Override
-    public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i1)
-    {
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i1) {
 
     }
 
     @Override
-    public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture)
-    {
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
         mCamera.stopPreview();
         mCamera.release();
         return true;
     }
 
     @Override
-    public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture)
-    {
+    public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
 
     }
 }

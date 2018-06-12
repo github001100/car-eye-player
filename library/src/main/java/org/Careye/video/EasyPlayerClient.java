@@ -1168,7 +1168,7 @@ public class EasyPlayerClient implements Client.SourceCallBack {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } else if (_frameType != Client.EASY_SDK_AUDIO_FRAME_FLAG) {//判断是否是音频数据
+        } else if (_frameType != Client.EASY_SDK_AUDIO_FRAME_FLAG) {//判断是否是音频数据 by fu 2018
             mNewestStample = frameInfo.stamp;
             frameInfo.audio = true;
             if (true) {

@@ -3,6 +3,7 @@ package org.Careye.easyplayer;
 import android.Manifest;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.TextureView;
 import android.view.View;
@@ -41,6 +43,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+
+import com.sh.camera.service.MainService;
 
 import org.Careye.easyplayer.fragments.ImageFragment;
 import org.Careye.easyplayer.fragments.PushFragment;
@@ -407,11 +411,23 @@ public class PlayActivity extends AppCompatActivity {
             }
         }
     }
-
+    private void getPermission() {
+        Log.e("TAG","OK");
+        if(!MainService.isrun){
+            startService(new Intent(PlayActivity.this, MainService.class));
+        }else{
+            Intent intent = new Intent(MainService.ACTION);
+            intent.putExtra("type", MainService.FULLSCREEN);
+            sendBroadcast(intent);
+        }
+        //finish();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        //getPermission();//////////////////////获取MainService服务
+
         //String url = getIntent().getStringExtra("play_url");//"rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";
         //String  url = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov00";//测试地址固定
         url = mBinding.inputUrl.getText().toString();
@@ -451,7 +467,6 @@ public class PlayActivity extends AppCompatActivity {
             mRenderFragment = (PlayFragment) getSupportFragmentManager().findFragmentById(R.id.render_holder);
         }
         initSoundPool();
-
         mBinding.liveVideoBar.liveVideoBarEnableAudio.setEnabled(false);
         mBinding.liveVideoBar.liveVideoBarTakePicture.setEnabled(false);
         mBinding.liveVideoBar.liveVideoBarRecord.setEnabled(false);
@@ -485,6 +500,23 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(PlayActivity.this, AboutActivity.class));
+            }
+        });
+        //推流按钮
+        mBinding.btnPusherPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //要调用另一个APP的activity所在的包名
+                String packageName = "com.careye.pusher";
+                //要调用另一个APP的activity名字
+                String activity = "com.sh.camera.MainActivity";
+                ComponentName component = new ComponentName(packageName, activity);
+                Intent intent = new Intent();
+                intent.setComponent(component);
+                intent.setFlags(101);
+                //intent.putExtra("data", setData());
+                startActivity(intent);
+                //startVideoUpload2(ServerManager.getInstance().getIp(), ServerManager.getInstance().getPort(),ServerManager.getInstance().getapp(), ServerManager.getInstance().getStreamname(), 0);
             }
         });
         //暂停
@@ -535,6 +567,10 @@ public class PlayActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //startActivity(new Intent(PlayActivity.this, StreamActivity.class));
                 //mRenderFragment.onDetach();
+                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    //申请WRITE_EXTERNAL_STORAGE权限
+                    ActivityCompat.requestPermissions(PlayActivity.this, new String[]{Manifest.permission.CAMERA}, 1);
+                }
                 getSupportFragmentManager().beginTransaction().add(R.id.render_holder, new PushFragment()).commit();
 
             }
@@ -592,6 +628,7 @@ public class PlayActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
     private void onVideoDisplayed() {

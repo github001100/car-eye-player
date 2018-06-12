@@ -72,5 +72,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="key_ip">KEY_IP</string>
     <string name="key_port">KEY_PORT</string>
+    <string name="key_app_name">KEY_APP_NAME</string>
+    <string name="key_shebei">KEY_SHEBEI</string>
+    <string name="key_zhen">KEY_ZHEN</string>
+    <string name="key_url">KEY_URL</string>
+
     <string name="key_udp_mode">USE_UDP_MODE</string>
 </resources>

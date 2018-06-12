@@ -15,13 +15,22 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/set_commen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="↓通用配置"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
         <EditText
             android:id="@+id/server_ip"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintTop_toBottomOf="@+id/set_commen"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -58,7 +67,15 @@
             android:id="@+id/imageView2"
             app:layout_constraintBottom_toBottomOf="@+id/server_ip"
             android:layout_marginRight="-1dp" />
+        <TextView
+            android:id="@+id/set_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="↓播放器设置"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
 
+            app:layout_constraintTop_toBottomOf="@+id/server_port" />
         <CheckBox
             android:id="@+id/transport_mode"
             android:layout_width="0dp"
@@ -72,7 +89,6 @@
             app:layout_constraintTop_toBottomOf="@+id/server_port"
             android:visibility="gone"
             />
-
         <CheckBox
             android:id="@+id/sw_codec"
             android:layout_width="0dp"
@@ -96,18 +112,73 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sw_codec" />
-
-        <Button
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/set_pusher"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onOK"
-            android:text="确认修改"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin30"
+            android:text="↓推流器设置"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/auto_record"  />
+
+            app:layout_constraintTop_toBottomOf="@+id/auto_record" />
+
+        <EditText
+            android:id="@+id/app_name"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:hint="应用名"
+            android:padding="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/set_pusher" />
+        <EditText
+            android:id="@+id/app_shebei"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="设备号"
+            android:padding="10dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_name" />
+        <EditText
+            android:id="@+id/app_zhen"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="帧频率"
+            android:inputType="number"
+            android:padding="10dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_shebei" />
+        <EditText
+            android:id="@+id/app_rtsp_url"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="RTSP URL"
+            android:padding="10dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_zhen" />
+        <Button
+            android:id="@+id/btn_save1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:onClick="onOK"
+            android:text="确认修改"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_rtsp_url" />
 
         <TextView
             android:layout_width="0dp"
@@ -129,4 +200,5 @@
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             app:layout_constraintHorizontal_bias="0.0" />
     </android.support.constraint.ConstraintLayout>
+
 </layout>
