@@ -1,9 +1,6 @@
 package org.Careye.easyplayer;
 
 import android.Manifest;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,14 +21,11 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
@@ -44,16 +38,13 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
-import com.sh.camera.service.MainService;
-
 import org.Careye.easyplayer.fragments.ImageFragment;
 import org.Careye.easyplayer.fragments.PushFragment;
-import org.Careye.push.StreamActivity;
+import org.Careye.push.util.Constants;
 import org.Careye.video.Client;
 import org.Careye.easyplayer.fragments.PlayFragment;
 import org.Careye.rtsp.player.R;
 import org.Careye.rtsp.player.databinding.ActivityMainBinding;
-import org.Careye.video.CarEyePlayerClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -77,6 +68,7 @@ public class PlayActivity extends AppCompatActivity {
     private float mMaxVolume;
     private ActivityMainBinding mBinding;
     private PlayFragment myFragment;
+    private PushFragment m_pushFragment;
     private long mLastReceivedLength;
     private   String url = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";//设置一个默认地址
     private  boolean useUDP;
@@ -411,27 +403,17 @@ public class PlayActivity extends AppCompatActivity {
             }
         }
     }
-    private void getPermission() {
-        Log.e("TAG","OK");
-        if(!MainService.isrun){
-            startService(new Intent(PlayActivity.this, MainService.class));
-        }else{
-            Intent intent = new Intent(MainService.ACTION);
-            intent.putExtra("type", MainService.FULLSCREEN);
-            sendBroadcast(intent);
-        }
-        //finish();
-    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        //getPermission();//////////////////////获取MainService服务
 
         //String url = getIntent().getStringExtra("play_url");//"rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";
         //String  url = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov00";//测试地址固定
         url = mBinding.inputUrl.getText().toString();
         myFragment = new PlayFragment();
+        m_pushFragment = new PushFragment();
         Bundle bundle = new Bundle();
         bundle.putString("MainActivity", "Hello,Fragment"); //首先有一个Fragment对象 调用这个对象的setArguments(bundle)传递数据 myFragment.setArguments(bundle);
 
@@ -506,17 +488,9 @@ public class PlayActivity extends AppCompatActivity {
         mBinding.btnPusherPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //要调用另一个APP的activity所在的包名
-                String packageName = "com.careye.pusher";
-                //要调用另一个APP的activity名字
-                String activity = "com.sh.camera.MainActivity";
-                ComponentName component = new ComponentName(packageName, activity);
-                Intent intent = new Intent();
-                intent.setComponent(component);
-                intent.setFlags(101);
-                //intent.putExtra("data", setData());
-                startActivity(intent);
-                //startVideoUpload2(ServerManager.getInstance().getIp(), ServerManager.getInstance().getPort(),ServerManager.getInstance().getapp(), ServerManager.getInstance().getStreamname(), 0);
+
+                m_pushFragment.startVideoUpload(Constants.SERVER_IP,Constants.SERVER_PORT,Constants.STREAM_NAME);
+
             }
         });
         //暂停
@@ -570,7 +544,10 @@ public class PlayActivity extends AppCompatActivity {
                     //申请WRITE_EXTERNAL_STORAGE权限
                     ActivityCompat.requestPermissions(PlayActivity.this, new String[]{Manifest.permission.CAMERA}, 1);
                 }
-                getSupportFragmentManager().beginTransaction().add(R.id.render_holder, new PushFragment()).commit();
+                if(m_pushFragment!= null) {
+                    getSupportFragmentManager().beginTransaction().add(R.id.render_holder, m_pushFragment).commit();
+
+                }
 
             }
         });
@@ -643,7 +620,6 @@ public class PlayActivity extends AppCompatActivity {
 
         mBinding.liveVideoBar.liveVideoBarTakePicture.setEnabled(false);
         mBinding.liveVideoBar.liveVideoBarRecord.setEnabled(false);
-
         //mRenderFragment.mSurfaceView.setVisibility(View.VISIBLE);
 
     }
@@ -651,9 +627,7 @@ public class PlayActivity extends AppCompatActivity {
     private void onPlayStoped() {
         mBinding.liveVideoBar.liveVideoBarEnableAudio.setEnabled(false);
         mHandler.removeCallbacks(mTimerRunnable);
-
         //mRenderFragment.mSurfaceView.setVisibility(View.GONE);
-
     }
 
     @Override

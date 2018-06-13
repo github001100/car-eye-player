@@ -17,9 +17,6 @@ import android.widget.EditText;
 import org.Careye.rtsp.player.R;
 import org.Careye.rtsp.player.databinding.ActivitySettingBinding;
 
-import com.sh.camera.ServerManager.ServerManager;
-import com.sh.camera.util.Constants;
-import com.sh.camera.version.StringUtil;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On

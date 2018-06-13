@@ -31,20 +31,6 @@ public class AboutActivity extends AppCompatActivity {
             //设置下划线文字
             spannableString.setSpan(new URLSpan("https://github.com/car-eye/EasyPlayer"), 0, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 
-            //设置文字的前景色
-            spannableString.setSpan(new ForegroundColorSpan(Color.RED), 0, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-            binding.desc.append(spannableString);
-
-            binding.desc.append("\n您也可以升级到我们的car-eye-player Pro全功能版 本，支持HTTP/RTSP/RTMP/HLS等多种流媒 体协议！");
-            spannableString = new SpannableString("戳我");
-            //设置下划线文字
-            spannableString.setSpan(new URLSpan("https://www.car-eye.cn/EasyPlayerPro"), 0, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-
-            //设置文字的前景色
-            spannableString.setSpan(new ForegroundColorSpan(Color.RED), 0, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-            binding.desc.append(spannableString);
-            binding.desc.append("或者扫描下载:");
-
-        binding.imageView.setImageResource(PlaylistActivity.isPro()?R.drawable.qrcode:R.drawable.qrcode_pro);
+            binding.imageView.setImageResource(PlaylistActivity.isPro()?R.drawable.qrcode:R.drawable.qrcode_pro);
     }
 }

@@ -49,20 +49,10 @@
             android:label="@string/title_activity_settings" />
 
         <activity
-            android:name="org.Careye.push.SettingActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name="org.Careye.push.StreamActivity"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
             android:name="org.Careye.easyplayer.PlayActivity"
             android:label="car-eye-player">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -75,7 +65,6 @@
             android:name="org.Careye.easyplayer.MediaFilesActivity"
             android:label="文件夹" />
 
-        <service android:name="com.sh.camera.service.MainService"></service>
 
         <activity android:name="org.Careye.easyplayer.AboutActivity"></activity>
     </application>
