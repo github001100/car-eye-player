@@ -70,7 +70,6 @@ public class HWConsumer extends Thread implements VideoConsumer {
         	Log.d("CMD", " onVideo not ready ");	
         	return 0;
         }
-              
         data = mVideoConverter.convert(data);
 		inputBuffers = mMediaCodec.getInputBuffers();
 		outputBuffers = mMediaCodec.getOutputBuffers();
@@ -84,7 +83,6 @@ public class HWConsumer extends Thread implements VideoConsumer {
 		    buffer.clear();
 		    mMediaCodec.queueInputBuffer(bufferIndex, 0, data.length, System.nanoTime() / 1000, 0);
 		}
-        
         return 0;
     }
     @Override

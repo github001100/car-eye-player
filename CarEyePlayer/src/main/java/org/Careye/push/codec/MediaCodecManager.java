@@ -58,8 +58,6 @@ public class MediaCodecManager {
 	 */
  public void StartUpload(Context context, int index, Pusher mPusher)
  {
-	 debugger = EncoderDebugger.debug(context, Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
-	 previewFormat = debugger.getNV21Convertor().getPlanar() ? ImageFormat.YV12 : ImageFormat.NV21;
      mVC = new HWConsumer(context, mPusher, index);
 	 try {
 		mVC.onVideoStart(Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);

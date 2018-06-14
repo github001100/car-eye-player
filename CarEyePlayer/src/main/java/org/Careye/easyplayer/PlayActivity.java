@@ -72,6 +72,8 @@ public class PlayActivity extends AppCompatActivity {
     private long mLastReceivedLength;
     private   String url = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";//设置一个默认地址
     private  boolean useUDP;
+    private  boolean  mUpload = false;
+    private  int mChannel=0;
     private final Handler mHandler = new Handler();
     private final Runnable mTimerRunnable = new Runnable() {
         @Override
@@ -488,9 +490,14 @@ public class PlayActivity extends AppCompatActivity {
         mBinding.btnPusherPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                m_pushFragment.startVideoUpload(Constants.SERVER_IP,Constants.SERVER_PORT,Constants.STREAM_NAME);
-
+                if(mUpload == false) {
+                    mChannel =  m_pushFragment.StartVideoUpload(Constants.SERVER_IP, Constants.SERVER_PORT, Constants.STREAM_NAME);
+                    mUpload = true;
+                }else
+                {
+                    m_pushFragment.StopVideoUpload(mChannel);
+                    mUpload = false;
+                }
             }
         });
         //暂停
