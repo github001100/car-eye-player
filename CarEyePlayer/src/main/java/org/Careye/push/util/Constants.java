@@ -45,11 +45,11 @@ public class Constants {
 	//四路
 	public static final int MAX_NUM_OF_CAMERAS = 1;
 	/**服务器IP*/
-	public static final String SERVER_IP = "www.car-eye.cn";
+	public static final String SERVER_IP = "www.car-eye.cn";//www.car-eye.cn
 	/**handle apk 升级消息*/
 	public static final int  MSG_APK_NEW = 1001;
 	/**服务器端口*/
-	public static final String SERVER_PORT = "10554";
+	public static final String SERVER_PORT = "10554";//10554
 	public static final String SERVER_ADDPORT = "10000";
 	/**设备号*/
 	public static final String STREAM_NAME = "13510671870";

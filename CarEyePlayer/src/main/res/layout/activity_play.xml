@@ -4,10 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <fragment
         android:name="org.Careye.easyplayer.fragments.PlayFragment"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/render_wnd_height"
+        android:layout_height="387dp"
         tools:layout="@layout/fragment_play"></fragment>
 
 </LinearLayout>

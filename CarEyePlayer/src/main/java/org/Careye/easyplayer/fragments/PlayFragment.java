@@ -458,7 +458,7 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
             return;
         }
         sendResult(RESULT_REND_STARTED, null);
-
+        mStreamRender.pause();
     }
 
     protected void sendResult(int resultCode, Bundle resultData) {
@@ -488,7 +488,7 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
         return true;
     }
 
-    private void stopRending() {
+    public void stopRending() {
         if (mStreamRender != null) {
             sendResult(RESULT_REND_STOPED, null);
             mStreamRender.stop();

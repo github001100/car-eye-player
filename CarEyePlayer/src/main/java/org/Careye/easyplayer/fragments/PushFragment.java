@@ -6,6 +6,7 @@ import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -24,6 +25,8 @@ import org.Careye.push.push.Pusher;
 import org.Careye.push.util.Constants;
 
 import java.io.IOException;
+
+import static org.Careye.easyplayer.fragments.PlayFragment.ARG_PARAM3;
 
 public class PushFragment extends Fragment implements TextureView.SurfaceTextureListener {
     private Camera mCamera;
@@ -44,23 +47,28 @@ public class PushFragment extends Fragment implements TextureView.SurfaceTexture
         previewCallback = new Camera.PreviewCallback() {
             @Override
             public void onPreviewFrame(byte[] data, Camera camera) {
-                   MediaCodecManager.getInstance().onPreviewFrameUpload(data,0,mCamera);
+                Log.d("CMD", " onPreviewFrame");
+                MediaCodecManager.getInstance().onPreviewFrameUpload(data,0,mCamera);
             }
         };
         view.addView(mTextureView);
+
         return view;
     }
-
-    public int  StartVideoUpload( String ipstr, String portstr, String serialno)
-    {
-        int index;
-        int id =1;
-        index = mPusher.CarEyeInitNetWorkRTSP( getActivity(),ipstr, portstr, String.format("%s&channel=%d.sdp",serialno,id), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
-        MediaCodecManager.getInstance().StartUpload(getActivity(),index, mPusher);
-        mCamera.setPreviewCallback(previewCallback);
-        return index;
+    /**
+     * 单例 2018 by fu
+     * @param rr
+     * @return
+     */
+    public static PushFragment newInstance( ResultReceiver rr) {
+        PushFragment fragment = new PushFragment();
+        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, url);
+//        args.putInt(ARG_PARAM2, type);
+        args.putParcelable(ARG_PARAM3, rr);
+        fragment.setArguments(args);
+        return fragment;
     }
-
     public void StopVideoUpload( int index)
     {
         if(index >=0 && index<=8)
@@ -70,14 +78,22 @@ public class PushFragment extends Fragment implements TextureView.SurfaceTexture
         }
         mCamera.setPreviewCallback(null);
     }
-
+    public int  StartVideoUpload( String ipstr, String portstr, String serialno)
+    {
+        int index;
+        int id =1;
+        index = mPusher.CarEyeInitNetWorkRTSP( getActivity(),ipstr, portstr, String.format("%s&channel=%d.sdp",serialno,id), Constants.CAREYE_VCODE_H264,20,Constants.CAREYE_ACODE_AAC,1,8000);
+        MediaCodecManager.getInstance().StartUpload(getActivity(),index, mPusher);
+        mCamera.setPreviewCallback(previewCallback);
+        return index;
+    }
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         try {
-           mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
+           mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
            Camera.Parameters parameters = mCamera.getParameters();
-           //int previewFormat =  debugger.getNV21Convertor().getPlanar() ? ImageFormat.YV12 : ImageFormat.NV21;
-           //parameters.setPreviewFormat(previewFormat);
+           int previewFormat =  debugger.getNV21Convertor().getPlanar() ? ImageFormat.YV12 : ImageFormat.NV21;
+           parameters.setPreviewFormat(previewFormat);
            parameters.setPreviewSize(Constants.RECORD_VIDEO_WIDTH, Constants.RECORD_VIDEO_HEIGHT);
           mCamera.setParameters(parameters);
         } catch (Exception e) {

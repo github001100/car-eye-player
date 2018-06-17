@@ -414,7 +414,7 @@ public class PlayActivity extends AppCompatActivity {
         //String url = getIntent().getStringExtra("play_url");//"rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";
         //String  url = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov00";//测试地址固定
         url = mBinding.inputUrl.getText().toString();
-        myFragment = new PlayFragment();
+        myFragment = new PlayFragment();//暂时未用的的
         m_pushFragment = new PushFragment();
         Bundle bundle = new Bundle();
         bundle.putString("MainActivity", "Hello,Fragment"); //首先有一个Fragment对象 调用这个对象的setArguments(bundle)传递数据 myFragment.setArguments(bundle);
@@ -442,11 +442,12 @@ public class PlayActivity extends AppCompatActivity {
                     }
                 };
             }
+
             useUDP = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.key_udp_mode), false);
             PlayFragment fragment = PlayFragment.newInstance(url, useUDP ? Client.TRANSTYPE_UDP : Client.TRANSTYPE_TCP, rr);//创建PlayFragment 实例
             getSupportFragmentManager().beginTransaction().add(R.id.render_holder, fragment).commit();
-
             mRenderFragment = fragment;
+
         } else {
             mRenderFragment = (PlayFragment) getSupportFragmentManager().findFragmentById(R.id.render_holder);
         }
@@ -505,14 +506,14 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //mRenderFragment.mSurfaceView.setVisibility(View.GONE);
-                mRenderFragment.mStreamRender.stop();//停止播放
+                mRenderFragment.mStreamRender.pause();//暂停播放
             }
         });
         //播放
         mBinding.toolbarPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mRenderFragment.mStreamRender.resume();
+                mRenderFragment.mStreamRender.resume();
                 url = mBinding.inputUrl.getText().toString();
                 ResultReceiver rr = getIntent().getParcelableExtra("rr");
                 if (rr == null) {
@@ -551,17 +552,39 @@ public class PlayActivity extends AppCompatActivity {
                     //申请WRITE_EXTERNAL_STORAGE权限
                     ActivityCompat.requestPermissions(PlayActivity.this, new String[]{Manifest.permission.CAMERA}, 1);
                 }
-                if(m_pushFragment!= null) {
+              /*  if(m_pushFragment!= null) {
                     getSupportFragmentManager().beginTransaction().add(R.id.render_holder, m_pushFragment).commit();
 
+                }*/
+                mRenderFragment.mStreamRender.pause();//停止播放
+                //mRenderFragment.stopRending();//停止播放
+                Intent i = new Intent(PlayActivity.this, PlayActivity.class);
+                i.putExtra("play_url", mBinding.inputUrl.getText().toString());
+                ResultReceiver rr = getIntent().getParcelableExtra("rr");
+                if (rr == null) {
+                    rr = new ResultReceiver(new Handler()) {
+                        @Override
+                        protected void onReceiveResult(int resultCode, Bundle resultData) {
+                            super.onReceiveResult(resultCode, resultData);
+//                            if (resultCode == PlayFragment.RESULT_REND_STARTED) {
+//                                onPlayStart();
+//                            } else if (resultCode == PlayFragment.RESULT_REND_STOPED) {
+//                                onPlayStoped();
+//                            } else if (resultCode == PlayFragment.RESULT_REND_VIDEO_DISPLAYED) {
+//                                onVideoDisplayed();
+//                            }
+                        }
+                    };
                 }
-
+                PushFragment pushfragment = PushFragment.newInstance( rr);//创建PlayFragment 实例
+                getSupportFragmentManager().beginTransaction().add(R.id.render_holder, pushfragment).commit();
             }
         });
         //播放器按钮
         mBinding.btnPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mRenderFragment.mStreamRender.pause();//停止播放
                 Intent i = new Intent(PlayActivity.this, PlayActivity.class);
                 i.putExtra("play_url", mBinding.inputUrl.getText().toString());
                 ResultReceiver rr = getIntent().getParcelableExtra("rr");

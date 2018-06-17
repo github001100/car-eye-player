@@ -1,4 +1,4 @@
-/*  car eye 车辆管理平台 
+/*  car eye 车辆管理平台
  * car-eye管理平台   www.car-eye.cn
  * car-eye开源网址:  https://github.com/Car-eye-team
  * Copyright
@@ -27,8 +27,8 @@ public class Pusher {
 	 * @return
 	 */
 	private ByteBuffer directbuffer;
-	
-	private Handler handle =null;	
+
+	private Handler handle =null;
 	public native int    CarEyeInitNetWorkRTSP(Context context,String serverIP, String serverPort, String streamName, int videoformat, int fps,int audioformat, int audiochannel, int audiosamplerate);
 	public native int 	CarEyePusherIsReadyRTSP(int channel);
 	public native long   CarEyeSendBufferRTSP(long time, byte[] data, int lenth, int type, int channel);
@@ -37,7 +37,7 @@ public class Pusher {
 	{
 		long ret;
 		//Log.e("puser", "timestamp:"+timestamp+"length:"+length);	
-		ret =  CarEyeSendBufferRTSP(timestamp, data,length,type,index);		
+		ret =  CarEyeSendBufferRTSP(timestamp, data,length,type,index);
 		return ret;
 	}
 
@@ -46,7 +46,7 @@ public class Pusher {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				 CarEyeStopPushNetRTSP(index);
+				CarEyeStopPushNetRTSP(index);
 			}
 		}).start();
 	}
