@@ -39,7 +39,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     //implementation project(':library')
     //implementation(name: 'library', ext: 'aar')
-    implementation(name: 'update-release', ext: 'aar')
+    //implementation(name: 'update-release', ext: 'aar')
     //    compile(name: 'rtspclient-release', ext: 'aar')
     implementation(name: 'texturegesture-release', ext: 'aar')
     implementation 'com.android.support:appcompat-v7:26.1.0'

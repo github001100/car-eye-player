@@ -1,7 +1,14 @@
-/*  car eye 车辆管理平台 
- * car-eye管理平台   www.car-eye.cn
- * car-eye开源网址:  https://github.com/Car-eye-team
- * Copyright
+/*
+ * Car eye 车辆管理平台: www.car-eye.cn
+ * Car eye 开源网址: https://github.com/Car-eye-team
+ * CarEyeRtmpAPI.c
+ *
+ * Author: Wgj
+ * Date: 2018-03-19 19:15
+ * Copyright 2018
+ *
+ * CarEye RTMP推流库接口实现
+ * 实时推送数据时候支持最大8个通道的流
  */
 package org.Careye.push.codec;
 
@@ -22,7 +29,7 @@ import java.io.IOException;
  * 项目名称：SH_CAMERA    
  * 类名称：MediaCodecManager    
  * 类描述：    
- * 创建人：Administrator    
+ * 创建人：Apple
  * 创建时间：2016年10月18日 上午11:56:29    
  * 修改人：Administrator    
  * 修改时间：2016年10月18日 上午11:56:29    

@@ -14,6 +14,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 
+import com.sh.camera.version.VersionBiz;
+
 import org.Careye.rtsp.player.R;
 import org.Careye.rtsp.player.databinding.ActivitySettingBinding;
 
@@ -34,6 +36,9 @@ public class SettingsActivity extends AppCompatActivity {
     public ActivitySettingBinding mBinding;
     EditText et1, et2, et3, et4, et5, et6;
 
+    /**是否有版本检测跳转至该界面*/
+    private boolean fromUpdateVersion = false;
+    public static SettingsActivity instance;
     /**
      * Binds a preference's summary to its value. More specifically, when the
      * preference's value is changed, its summary (line of text below the
@@ -47,6 +52,8 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_setting);
         SharedPreferences pref = getSharedPreferences("mydata",MODE_MULTI_PROCESS);
+        instance = this;
+
 //        "114.55.107.180"
         //通用参数
         mBinding.serverIp.setText(pref.getString(getString(R.string.key_ip), TheApp.DEFAULT_SERVER_IP));//默认 服务器IP 0.0.0.0  PreferenceManager.getDefaultSharedPreferences(this)
@@ -142,6 +149,27 @@ public class SettingsActivity extends AppCompatActivity {
                 et5.setText("rtsp://"+et1.getText()+":"+et2.getText()+"/"+editable+et4.getText()+"&channel=1.sdp");
             }
         });
+
+        VersionBiz v = new VersionBiz(this);
+        String version = "";
+        try {
+            version = v.getVersionName(this);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        //tv_version.setText("v"+version);
+
+        fromUpdateVersion = (Boolean) getIntent().getBooleanExtra("fromUpdateVersion", false);
+        v.doCheckVersion(false,fromUpdateVersion);
+
+    }
+
+    public static SettingsActivity getInstance() {
+        if (instance == null) {
+            instance = new SettingsActivity();
+        }
+        return instance;
     }
 
     @Override
@@ -169,6 +197,8 @@ public class SettingsActivity extends AppCompatActivity {
         editor.apply();
         finish();
     }
+
+
 
     public void onWhatIpMean(View view) {
         if (mBinding.whatIpMean.getVisibility() != View.VISIBLE) {
