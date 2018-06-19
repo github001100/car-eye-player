@@ -1,10 +1,13 @@
 package org.Careye.easyplayer;
 
 
+import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.text.Editable;
@@ -39,6 +42,12 @@ public class SettingsActivity extends AppCompatActivity {
     /**是否有版本检测跳转至该界面*/
     private boolean fromUpdateVersion = false;
     public static SettingsActivity instance;
+
+    //权限
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            "android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.WRITE_EXTERNAL_STORAGE" };
     /**
      * Binds a preference's summary to its value. More specifically, when the
      * preference's value is changed, its summary (line of text below the
@@ -46,13 +55,33 @@ public class SettingsActivity extends AppCompatActivity {
      * immediately updated upon calling this method. The exact display format is
      * dependent on the type of preference.
      */
+    /**
+     *  获取权限
+     * @param activity
+     */
+    public static void verifyStoragePermissions(Activity activity) {
 
+        try {
+            //检测是否有写的权限
+            int permission = ActivityCompat.checkSelfPermission(activity,
+                    "android.permission.WRITE_EXTERNAL_STORAGE");
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                // 没有写的权限，去申请写的权限，会弹出对话框
+                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,REQUEST_EXTERNAL_STORAGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_setting);
         SharedPreferences pref = getSharedPreferences("mydata",MODE_MULTI_PROCESS);
-        instance = this;
+        instance = this;//有用
+
+        verifyStoragePermissions(getInstance());
+
 
 //        "114.55.107.180"
         //通用参数

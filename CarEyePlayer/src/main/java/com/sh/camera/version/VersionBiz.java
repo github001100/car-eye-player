@@ -277,6 +277,7 @@ public class VersionBiz {
 				@Override
 				public void onClick(DialogInterface dialog,
 						int which) {
+
 					pBar = new ProgressDialog(context);
 					pBar.setCanceledOnTouchOutside(false);
 					pBar.setTitle("正在下载");
@@ -320,7 +321,7 @@ public class VersionBiz {
 					File file = new File(
 							Environment.getExternalStorageDirectory(),
 							UPDATE_SAVENAME);
-					FileOutputStream fos = new FileOutputStream(file);
+					FileOutputStream fos = new FileOutputStream(file);//异常java.io.FileNotFoundException: /storage/emulated/0/camera.apk: open failed: EACCES (Permission denied)
 					BufferedInputStream bis = new BufferedInputStream(is);
 					byte[] buffer = new byte[1024];
 					int len;
