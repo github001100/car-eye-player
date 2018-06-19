@@ -8,7 +8,7 @@
     <fragment
         android:name="org.Careye.easyplayer.fragments.PlayFragment"
         android:layout_width="match_parent"
-        android:layout_height="387dp"
+        android:layout_height="316dp"
         tools:layout="@layout/fragment_play"></fragment>
 
 </LinearLayout>

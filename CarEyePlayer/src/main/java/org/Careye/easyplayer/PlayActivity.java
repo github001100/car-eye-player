@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
+import android.hardware.Camera;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -70,10 +71,12 @@ public class PlayActivity extends AppCompatActivity {
     private PlayFragment myFragment;
     private PushFragment m_pushFragment;
     private long mLastReceivedLength;
-    private   String url = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";//设置一个默认地址
-    private  boolean useUDP;
-    private  boolean  mUpload = false;
-    private  int mChannel=0;
+    private String url = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";//设置一个默认地址
+    private boolean useUDP;
+    private boolean mUpload = false;
+    private int mChannel = 0;
+    private Camera camera;
+
     private final Handler mHandler = new Handler();
     private final Runnable mTimerRunnable = new Runnable() {
         @Override
@@ -473,29 +476,71 @@ public class PlayActivity extends AppCompatActivity {
             mBinding.renderHolder.getLayoutParams().height = getResources().getDimensionPixelSize(R.dimen.render_wnd_height);
             mRenderFragment.quiteFullscreen();
         }
-        mBinding.msgTxt.setMovementMethod(new ScrollingMovementMethod());
+        mBinding.msgTxt.setMovementMethod(new ScrollingMovementMethod());//显示一些日志信息
 
         mBinding.toolbarSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PlayActivity.this, SettingsActivity.class));
+                //setWindowMin();
+                Intent intent_set = new Intent(getApplicationContext(), SettingsActivity.class);//设置
+                intent_set.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent_set);
+                //startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
             }
         });
         mBinding.toolbarHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PlayActivity.this, AboutActivity.class));
+                startActivity(new Intent(getApplicationContext(), AboutActivity.class));
             }
         });
-        //推流按钮
+        SharedPreferences pref = getSharedPreferences("mydata",MODE_MULTI_PROCESS);
+        final String sip = pref.getString(getString(R.string.key_ip),"192.168.0.110");
+        final String key_port = pref.getString(getString(R.string.key_port),"8888");
+        final String key_app_name = pref.getString(getString(R.string.key_app_name),"");
+
+        //点击内 推流
+        mBinding.btnPushStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*mBinding.btnPushUrl.setText("rtsp://" + sip + ":" + key_port + "/" + key_app_name + ".sdp");
+
+                if (mUpload == false) {
+                    mChannel = m_pushFragment.StartVideoUpload(Constants.SERVER_IP, Constants.SERVER_PORT, Constants.STREAM_NAME);
+                    mUpload = true;
+                } else {
+                    m_pushFragment.StopVideoUpload(mChannel);
+                    mUpload = false;
+                }*/
+            }
+        });
+
+        //切换摄像头
+        mBinding.btnSwitchCammars.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //m_pushFragment.closeCamera();
+                PushFragment.mCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
+
+                m_pushFragment.openCamera();
+            }
+        });
+        //推流按钮最右边的那个 已隐藏
         mBinding.btnPusherPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mUpload == false) {
-                    mChannel =  m_pushFragment.StartVideoUpload(Constants.SERVER_IP, Constants.SERVER_PORT, Constants.STREAM_NAME);
+              /*  if (mUpload == false) {
+                    mChannel = m_pushFragment.StartVideoUpload(Constants.SERVER_IP, Constants.SERVER_PORT, Constants.STREAM_NAME);
                     mUpload = true;
-                }else
-                {
+                } else {
+                    m_pushFragment.StopVideoUpload(mChannel);
+                    mUpload = false;
+                }*/
+                mBinding.btnPushUrl.setText("rtsp://" + sip + ":" + key_port + "/" + key_app_name + ".sdp");
+                if (mUpload == false) {
+                    mChannel = m_pushFragment.StartVideoUpload(Constants.SERVER_IP, Constants.SERVER_PORT, Constants.STREAM_NAME);
+                    mUpload = true;
+                } else {
                     m_pushFragment.StopVideoUpload(mChannel);
                     mUpload = false;
                 }
@@ -538,7 +583,7 @@ public class PlayActivity extends AppCompatActivity {
 
                 //mRenderFragment = (PlayFragment) getSupportFragmentManager().findFragmentById(R.id.render_holder);
 
-                Toast.makeText(getApplicationContext(),url,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
 
             }
         });
@@ -576,7 +621,7 @@ public class PlayActivity extends AppCompatActivity {
                         }
                     };
                 }
-                PushFragment pushfragment = PushFragment.newInstance( rr);//创建PlayFragment 实例
+                PushFragment pushfragment = PushFragment.newInstance(rr);//创建PlayFragment 实例
                 getSupportFragmentManager().beginTransaction().add(R.id.render_holder, pushfragment).commit();
             }
         });

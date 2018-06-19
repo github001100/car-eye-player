@@ -31,7 +31,7 @@ import org.Careye.rtsp.player.databinding.ActivitySettingBinding;
  */
 public class SettingsActivity extends AppCompatActivity {
 
-    private ActivitySettingBinding mBinding;
+    public ActivitySettingBinding mBinding;
     EditText et1, et2, et3, et4, et5, et6;
 
     /**
@@ -46,19 +46,20 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_setting);
+        SharedPreferences pref = getSharedPreferences("mydata",MODE_MULTI_PROCESS);
 //        "114.55.107.180"
         //通用参数
-        mBinding.serverIp.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_ip), TheApp.DEFAULT_SERVER_IP));//默认 服务器IP 0.0.0.0
-        mBinding.serverPort.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_port), "10008"));
+        mBinding.serverIp.setText(pref.getString(getString(R.string.key_ip), TheApp.DEFAULT_SERVER_IP));//默认 服务器IP 0.0.0.0  PreferenceManager.getDefaultSharedPreferences(this)
+        mBinding.serverPort.setText(pref.getString(getString(R.string.key_port), "10008"));
         //推流器设置 参数
-        mBinding.appName.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_app_name), "key_app_name"));
-        mBinding.appShebei.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_shebei), "key_shebei"));
-        mBinding.appZhen.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_zhen), "20"));
-        mBinding.appRtspUrl.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_url), "RTSP://www.car-eye.cn"));
+        mBinding.appName.setText(pref.getString(getString(R.string.key_app_name), "key_app_name"));
+        mBinding.appShebei.setText(pref.getString(getString(R.string.key_shebei), "key_shebei"));
+        mBinding.appZhen.setText(pref.getString(getString(R.string.key_zhen), "20"));
+        mBinding.appRtspUrl.setText(pref.getString(getString(R.string.key_url), "RTSP://www.car-eye.cn"));
 
-        mBinding.transportMode.setChecked(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.key_udp_mode), false));
-        mBinding.autoRecord.setChecked(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("auto_record", false));
-        mBinding.swCodec.setChecked(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("use-sw-codec", false));
+        mBinding.transportMode.setChecked(pref.getBoolean(getString(R.string.key_udp_mode), false));
+        mBinding.autoRecord.setChecked(pref.getBoolean("auto_record", false));
+        mBinding.swCodec.setChecked(pref.getBoolean("use-sw-codec", false));
 
         //推流服务器相关信息 by fu 2018 6 8
         /*mBinding.serverIp.setText(ServerManager.getInstance().getIp());
@@ -92,7 +93,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 Log.d("CMD", "afterTextChanged 被执行---->" + editable);
-                et5.setText("rtsp://"+editable+":"+et2.getText()+"/"+et3.getText()+"/"+et4.getText()+"?channel=1.sdp");
+                et5.setText("rtsp://"+editable+":"+et2.getText()+"/"+et3.getText()+et4.getText()+"&channel=1.sdp");
             }
         });
 
@@ -108,7 +109,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 Log.d("CMD", "afterTextChanged 被执行---->" + editable);
-                et5.setText("rtsp://"+et1.getText()+":"+editable+"/"+et3.getText()+"/"+et4.getText()+"?channel=1.sdp");
+                et5.setText("rtsp://"+et1.getText()+":"+editable+"/"+et3.getText()+et4.getText()+"&channel=1.sdp");
             }
         });
         //设备号 文本事件
@@ -123,7 +124,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 Log.d("CMD", "afterTextChanged 被执行---->" + editable);
-                et5.setText("rtsp://"+et1.getText()+":"+et2.getText()+"/"+et3.getText()+"/"+editable+"?channel=1.sdp");
+                et5.setText("rtsp://"+et1.getText()+":"+et2.getText()+"/"+et3.getText()+editable+"&channel=1.sdp");
             }
         });
         //应用名 文本事件
@@ -138,7 +139,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 Log.d("CMD", "afterTextChanged 被执行---->" + editable);
-                et5.setText("rtsp://"+et1.getText()+":"+et2.getText()+"/"+editable+"/"+et4.getText()+"?channel=1.sdp");
+                et5.setText("rtsp://"+et1.getText()+":"+et2.getText()+"/"+editable+et4.getText()+"&channel=1.sdp");
             }
         });
     }
@@ -150,12 +151,16 @@ public class SettingsActivity extends AppCompatActivity {
 
     //点击保存 赋值  按钮 触发
     public void onOK(View view) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        //SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+
+        SharedPreferences.Editor editor = getSharedPreferences("mydata",MODE_MULTI_PROCESS).edit();
+
         editor.putString(getString(R.string.key_ip), mBinding.serverIp.getText().toString());
         editor.putString(getString(R.string.key_port), mBinding.serverPort.getText().toString());
         editor.putString(getString(R.string.key_app_name), mBinding.appName.getText().toString());
         editor.putString(getString(R.string.key_shebei), mBinding.appShebei.getText().toString());
         editor.putString(getString(R.string.key_zhen), mBinding.appZhen.getText().toString());
+
         editor.putString(getString(R.string.key_url), mBinding.appRtspUrl.getText().toString());
 
         editor.putBoolean(getString(R.string.key_udp_mode), mBinding.transportMode.isChecked());

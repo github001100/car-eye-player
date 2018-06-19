@@ -30,6 +30,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -189,7 +190,13 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
 //                activity.onPlayFragmentClicked(PlayFragment.this);
 //            }
 //        });
+        Button btn_switch_cammars = getActivity().findViewById(R.id.btn_switch_cammars);
+        Button btn_push = getActivity().findViewById(R.id.btn_push_stop);
+        Button btn_url = getActivity().findViewById(R.id.btn_push_url);
 
+        btn_switch_cammars.setVisibility(View.GONE);
+        btn_url.setVisibility(View.GONE);
+        btn_push.setVisibility(View.GONE);
         cover = (ImageView) view.findViewById(R.id.surface_cover);
 //        Glide.with(this).load(PlaylistActivity.url2localPosterFile(getActivity(), mUrl)).diskCacheStrategy(DiskCacheStrategy.NONE).placeholder(R.drawable.placeholder).into(new ImageViewTarget<GlideDrawable>(cover) {
 //            @Override

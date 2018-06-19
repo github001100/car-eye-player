@@ -64,10 +64,10 @@ public class Constants {
 	public static String addPort = "add_port";
 	public static String URL = "URL";
 	public static String application = "application";
-	public static int CAREYE_VCODE_H264 = 0x1C;
+	public static int CAREYE_VCODE_H264 = 0x1C;//设置里面对应哪一个
 	public static int CAREYE_VCODE_H265 = 0x48323635;
 
-	public static int CAREYE_ACODE_AAC = 0x15002;
+	public static int CAREYE_ACODE_AAC = 0x15002;//设置里面对应哪一个
 	public static int CAREYE_ACODE_G711U = 0x10006;
 	public static int CAREYE_ACODE_G711A = 0x10007;
 	public static int CAREYE_ACODE_G726 = 0x10007;
