@@ -1,3 +1,15 @@
+/*
+ * Car eye 车辆管理平台: www.car-eye.cn
+ * Car eye 开源网址: https://github.com/Car-eye-team
+ * CarEyeRtmpAPI.c
+ *
+ * Author: Wgj
+ * Date: 2018-03-19 19:15
+ * Copyright 2018
+ *
+ * CarEye RTMP推流库接口实现
+ * 实时推送数据时候支持最大8个通道的流
+ */
 package org.Careye.easyplayer.fragments;
 
 
@@ -30,6 +42,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -189,7 +202,13 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
 //                activity.onPlayFragmentClicked(PlayFragment.this);
 //            }
 //        });
+        Button btn_switch_cammars = getActivity().findViewById(R.id.btn_switch_cammars);
+        Button btn_push = getActivity().findViewById(R.id.btn_push_stop);
+        Button btn_url = getActivity().findViewById(R.id.btn_push_url);
 
+        btn_switch_cammars.setVisibility(View.GONE);
+        btn_url.setVisibility(View.GONE);
+        btn_push.setVisibility(View.GONE);
         cover = (ImageView) view.findViewById(R.id.surface_cover);
 //        Glide.with(this).load(PlaylistActivity.url2localPosterFile(getActivity(), mUrl)).diskCacheStrategy(DiskCacheStrategy.NONE).placeholder(R.drawable.placeholder).into(new ImageViewTarget<GlideDrawable>(cover) {
 //            @Override
@@ -458,7 +477,7 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
             return;
         }
         sendResult(RESULT_REND_STARTED, null);
-
+        mStreamRender.pause();
     }
 
     protected void sendResult(int resultCode, Bundle resultData) {
@@ -488,7 +507,7 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
         return true;
     }
 
-    private void stopRending() {
+    public void stopRending() {
         if (mStreamRender != null) {
             sendResult(RESULT_REND_STOPED, null);
             mStreamRender.stop();

@@ -1,3 +1,15 @@
+/*
+ * Car eye 车辆管理平台: www.car-eye.cn
+ * Car eye 开源网址: https://github.com/Car-eye-team
+ * CarEyeRtmpAPI.c
+ *
+ * Author: Wgj
+ * Date: 2018-03-19 19:15
+ * Copyright 2018
+ *
+ * CarEye RTMP推流库接口实现
+ * 实时推送数据时候支持最大8个通道的流
+ */
 package org.Careye.easyplayer;
 
 import android.content.ContentValues;
@@ -32,7 +44,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
 
 import org.Careye.easyplayer.data.VideoSource;
-import org.easydarwin.update.UpdateMgr;//0000
 import org.Careye.rtsp.player.BuildConfig;
 import org.Careye.rtsp.player.R;
 import org.Careye.rtsp.player.databinding.ContentPlaylistBinding;
@@ -51,8 +62,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static org.easydarwin.update.UpdateMgr.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE;
-
 public class PlaylistActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
 
     private static final int REQUEST_PLAY = 1000;
@@ -61,7 +70,7 @@ public class PlaylistActivity extends AppCompatActivity implements View.OnClickL
     private int mPos;
     private ContentPlaylistBinding mBinding;
     private Cursor mCursor;
-    private UpdateMgr update;
+    //private UpdateMgr update;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,19 +253,19 @@ public class PlaylistActivity extends AppCompatActivity implements View.OnClickL
         } else {
             url = "http://www.car-eye.org/versions/easyplayer/version.txt";
         }
-        update = new UpdateMgr(this);
-        update.checkUpdate(url);
+        //update = new UpdateMgr(this);
+        //update.checkUpdate(url);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
+            case 12:
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    update.doDownload();
+                    //update.doDownload();
                 }
         }
     }

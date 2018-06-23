@@ -1,3 +1,15 @@
+/*
+ * Car eye 车辆管理平台: www.car-eye.cn
+ * Car eye 开源网址: https://github.com/Car-eye-team
+ * CarEyeRtmpAPI.c
+ *
+ * Author: Wgj
+ * Date: 2018-03-19 19:15
+ * Copyright 2018
+ *
+ * CarEye RTMP推流库接口实现
+ * 实时推送数据时候支持最大8个通道的流
+ */
 package org.Careye.easyplayer;
 
 import android.Manifest;
@@ -9,6 +21,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
+import android.hardware.Camera;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -70,10 +83,12 @@ public class PlayActivity extends AppCompatActivity {
     private PlayFragment myFragment;
     private PushFragment m_pushFragment;
     private long mLastReceivedLength;
-    private   String url = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";//设置一个默认地址
-    private  boolean useUDP;
-    private  boolean  mUpload = false;
-    private  int mChannel=0;
+    private String url = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";//设置一个默认地址
+    private boolean useUDP;
+    private boolean mUpload = false;
+    private int mChannel = 0;
+    private Camera camera;
+
     private final Handler mHandler = new Handler();
     private final Runnable mTimerRunnable = new Runnable() {
         @Override
@@ -414,7 +429,7 @@ public class PlayActivity extends AppCompatActivity {
         //String url = getIntent().getStringExtra("play_url");//"rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";
         //String  url = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov00";//测试地址固定
         url = mBinding.inputUrl.getText().toString();
-        myFragment = new PlayFragment();
+        myFragment = new PlayFragment();//暂时未用的的
         m_pushFragment = new PushFragment();
         Bundle bundle = new Bundle();
         bundle.putString("MainActivity", "Hello,Fragment"); //首先有一个Fragment对象 调用这个对象的setArguments(bundle)传递数据 myFragment.setArguments(bundle);
@@ -442,11 +457,12 @@ public class PlayActivity extends AppCompatActivity {
                     }
                 };
             }
+
             useUDP = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.key_udp_mode), false);
             PlayFragment fragment = PlayFragment.newInstance(url, useUDP ? Client.TRANSTYPE_UDP : Client.TRANSTYPE_TCP, rr);//创建PlayFragment 实例
             getSupportFragmentManager().beginTransaction().add(R.id.render_holder, fragment).commit();
-
             mRenderFragment = fragment;
+
         } else {
             mRenderFragment = (PlayFragment) getSupportFragmentManager().findFragmentById(R.id.render_holder);
         }
@@ -472,29 +488,71 @@ public class PlayActivity extends AppCompatActivity {
             mBinding.renderHolder.getLayoutParams().height = getResources().getDimensionPixelSize(R.dimen.render_wnd_height);
             mRenderFragment.quiteFullscreen();
         }
-        mBinding.msgTxt.setMovementMethod(new ScrollingMovementMethod());
+        mBinding.msgTxt.setMovementMethod(new ScrollingMovementMethod());//显示一些日志信息
 
         mBinding.toolbarSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PlayActivity.this, SettingsActivity.class));
+                //setWindowMin();
+                Intent intent_set = new Intent(getApplicationContext(), SettingsActivity.class);//设置
+                intent_set.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent_set);
+                //startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
             }
         });
         mBinding.toolbarHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PlayActivity.this, AboutActivity.class));
+                startActivity(new Intent(getApplicationContext(), AboutActivity.class));
             }
         });
-        //推流按钮
+        SharedPreferences pref = getSharedPreferences("mydata",MODE_MULTI_PROCESS);
+        final String sip = pref.getString(getString(R.string.key_ip),"192.168.0.110");
+        final String key_port = pref.getString(getString(R.string.key_port),"8888");
+        final String key_app_name = pref.getString(getString(R.string.key_app_name),"");
+
+        //点击内 推流
+        mBinding.btnPushStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*mBinding.btnPushUrl.setText("rtsp://" + sip + ":" + key_port + "/" + key_app_name + ".sdp");
+
+                if (mUpload == false) {
+                    mChannel = m_pushFragment.StartVideoUpload(Constants.SERVER_IP, Constants.SERVER_PORT, Constants.STREAM_NAME);
+                    mUpload = true;
+                } else {
+                    m_pushFragment.StopVideoUpload(mChannel);
+                    mUpload = false;
+                }*/
+            }
+        });
+
+        //切换摄像头
+        mBinding.btnSwitchCammars.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //m_pushFragment.closeCamera();
+                PushFragment.mCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
+
+                m_pushFragment.openCamera();
+            }
+        });
+        //推流按钮最右边的那个 已隐藏
         mBinding.btnPusherPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mUpload == false) {
-                    mChannel =  m_pushFragment.StartVideoUpload(Constants.SERVER_IP, Constants.SERVER_PORT, Constants.STREAM_NAME);
+              /*  if (mUpload == false) {
+                    mChannel = m_pushFragment.StartVideoUpload(Constants.SERVER_IP, Constants.SERVER_PORT, Constants.STREAM_NAME);
                     mUpload = true;
-                }else
-                {
+                } else {
+                    m_pushFragment.StopVideoUpload(mChannel);
+                    mUpload = false;
+                }*/
+                mBinding.btnPushUrl.setText("rtsp://" + sip + ":" + key_port + "/" + key_app_name + ".sdp");
+                if (mUpload == false) {
+                    mChannel = m_pushFragment.StartVideoUpload(Constants.SERVER_IP, Constants.SERVER_PORT, Constants.STREAM_NAME);
+                    mUpload = true;
+                } else {
                     m_pushFragment.StopVideoUpload(mChannel);
                     mUpload = false;
                 }
@@ -505,14 +563,14 @@ public class PlayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //mRenderFragment.mSurfaceView.setVisibility(View.GONE);
-                mRenderFragment.mStreamRender.stop();//停止播放
+                mRenderFragment.mStreamRender.pause();//暂停播放
             }
         });
         //播放
         mBinding.toolbarPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mRenderFragment.mStreamRender.resume();
+                mRenderFragment.mStreamRender.resume();
                 url = mBinding.inputUrl.getText().toString();
                 ResultReceiver rr = getIntent().getParcelableExtra("rr");
                 if (rr == null) {
@@ -537,7 +595,7 @@ public class PlayActivity extends AppCompatActivity {
 
                 //mRenderFragment = (PlayFragment) getSupportFragmentManager().findFragmentById(R.id.render_holder);
 
-                Toast.makeText(getApplicationContext(),url,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
 
             }
         });
@@ -551,17 +609,39 @@ public class PlayActivity extends AppCompatActivity {
                     //申请WRITE_EXTERNAL_STORAGE权限
                     ActivityCompat.requestPermissions(PlayActivity.this, new String[]{Manifest.permission.CAMERA}, 1);
                 }
-                if(m_pushFragment!= null) {
+              /*  if(m_pushFragment!= null) {
                     getSupportFragmentManager().beginTransaction().add(R.id.render_holder, m_pushFragment).commit();
 
+                }*/
+                mRenderFragment.mStreamRender.pause();//停止播放
+                //mRenderFragment.stopRending();//停止播放
+                Intent i = new Intent(PlayActivity.this, PlayActivity.class);
+                i.putExtra("play_url", mBinding.inputUrl.getText().toString());
+                ResultReceiver rr = getIntent().getParcelableExtra("rr");
+                if (rr == null) {
+                    rr = new ResultReceiver(new Handler()) {
+                        @Override
+                        protected void onReceiveResult(int resultCode, Bundle resultData) {
+                            super.onReceiveResult(resultCode, resultData);
+//                            if (resultCode == PlayFragment.RESULT_REND_STARTED) {
+//                                onPlayStart();
+//                            } else if (resultCode == PlayFragment.RESULT_REND_STOPED) {
+//                                onPlayStoped();
+//                            } else if (resultCode == PlayFragment.RESULT_REND_VIDEO_DISPLAYED) {
+//                                onVideoDisplayed();
+//                            }
+                        }
+                    };
                 }
-
+                PushFragment pushfragment = PushFragment.newInstance(rr);//创建PlayFragment 实例
+                getSupportFragmentManager().beginTransaction().add(R.id.render_holder, pushfragment).commit();
             }
         });
         //播放器按钮
         mBinding.btnPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mRenderFragment.mStreamRender.pause();//停止播放
                 Intent i = new Intent(PlayActivity.this, PlayActivity.class);
                 i.putExtra("play_url", mBinding.inputUrl.getText().toString());
                 ResultReceiver rr = getIntent().getParcelableExtra("rr");

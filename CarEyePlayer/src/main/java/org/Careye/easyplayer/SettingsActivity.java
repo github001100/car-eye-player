@@ -1,10 +1,13 @@
 package org.Careye.easyplayer;
 
 
+import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.text.Editable;
@@ -13,6 +16,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+
+import com.sh.camera.version.VersionBiz;
 
 import org.Careye.rtsp.player.R;
 import org.Careye.rtsp.player.databinding.ActivitySettingBinding;
@@ -31,9 +36,18 @@ import org.Careye.rtsp.player.databinding.ActivitySettingBinding;
  */
 public class SettingsActivity extends AppCompatActivity {
 
-    private ActivitySettingBinding mBinding;
+    public ActivitySettingBinding mBinding;
     EditText et1, et2, et3, et4, et5, et6;
 
+    /**是否有版本检测跳转至该界面*/
+    private boolean fromUpdateVersion = false;
+    public static SettingsActivity instance;
+
+    //权限
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            "android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.WRITE_EXTERNAL_STORAGE" };
     /**
      * Binds a preference's summary to its value. More specifically, when the
      * preference's value is changed, its summary (line of text below the
@@ -41,24 +55,47 @@ public class SettingsActivity extends AppCompatActivity {
      * immediately updated upon calling this method. The exact display format is
      * dependent on the type of preference.
      */
+    /**
+     *  获取权限
+     * @param activity
+     */
+    public static void verifyStoragePermissions(Activity activity) {
 
+        try {
+            //检测是否有写的权限
+            int permission = ActivityCompat.checkSelfPermission(activity,
+                    "android.permission.WRITE_EXTERNAL_STORAGE");
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                // 没有写的权限，去申请写的权限，会弹出对话框
+                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,REQUEST_EXTERNAL_STORAGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_setting);
+        SharedPreferences pref = getSharedPreferences("mydata",MODE_MULTI_PROCESS);
+        instance = this;//有用
+
+        verifyStoragePermissions(getInstance());
+
+
 //        "114.55.107.180"
         //通用参数
-        mBinding.serverIp.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_ip), TheApp.DEFAULT_SERVER_IP));//默认 服务器IP 0.0.0.0
-        mBinding.serverPort.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_port), "10008"));
+        mBinding.serverIp.setText(pref.getString(getString(R.string.key_ip), TheApp.DEFAULT_SERVER_IP));//默认 服务器IP 0.0.0.0  PreferenceManager.getDefaultSharedPreferences(this)
+        mBinding.serverPort.setText(pref.getString(getString(R.string.key_port), "10008"));
         //推流器设置 参数
-        mBinding.appName.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_app_name), "key_app_name"));
-        mBinding.appShebei.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_shebei), "key_shebei"));
-        mBinding.appZhen.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_zhen), "20"));
-        mBinding.appRtspUrl.setText(PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.key_url), "RTSP://www.car-eye.cn"));
+        mBinding.appName.setText(pref.getString(getString(R.string.key_app_name), "key_app_name"));
+        mBinding.appShebei.setText(pref.getString(getString(R.string.key_shebei), "key_shebei"));
+        mBinding.appZhen.setText(pref.getString(getString(R.string.key_zhen), "20"));
+        mBinding.appRtspUrl.setText(pref.getString(getString(R.string.key_url), "RTSP://www.car-eye.cn"));
 
-        mBinding.transportMode.setChecked(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.key_udp_mode), false));
-        mBinding.autoRecord.setChecked(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("auto_record", false));
-        mBinding.swCodec.setChecked(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("use-sw-codec", false));
+        mBinding.transportMode.setChecked(pref.getBoolean(getString(R.string.key_udp_mode), false));
+        mBinding.autoRecord.setChecked(pref.getBoolean("auto_record", false));
+        mBinding.swCodec.setChecked(pref.getBoolean("use-sw-codec", false));
 
         //推流服务器相关信息 by fu 2018 6 8
         /*mBinding.serverIp.setText(ServerManager.getInstance().getIp());
@@ -92,7 +129,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 Log.d("CMD", "afterTextChanged 被执行---->" + editable);
-                et5.setText("rtsp://"+editable+":"+et2.getText()+"/"+et3.getText()+"/"+et4.getText()+"?channel=1.sdp");
+                et5.setText("rtsp://"+editable+":"+et2.getText()+"/"+et3.getText()+et4.getText()+"&channel=1.sdp");
             }
         });
 
@@ -108,7 +145,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 Log.d("CMD", "afterTextChanged 被执行---->" + editable);
-                et5.setText("rtsp://"+et1.getText()+":"+editable+"/"+et3.getText()+"/"+et4.getText()+"?channel=1.sdp");
+                et5.setText("rtsp://"+et1.getText()+":"+editable+"/"+et3.getText()+et4.getText()+"&channel=1.sdp");
             }
         });
         //设备号 文本事件
@@ -123,7 +160,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 Log.d("CMD", "afterTextChanged 被执行---->" + editable);
-                et5.setText("rtsp://"+et1.getText()+":"+et2.getText()+"/"+et3.getText()+"/"+editable+"?channel=1.sdp");
+                et5.setText("rtsp://"+et1.getText()+":"+et2.getText()+"/"+et3.getText()+editable+"&channel=1.sdp");
             }
         });
         //应用名 文本事件
@@ -138,9 +175,30 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 Log.d("CMD", "afterTextChanged 被执行---->" + editable);
-                et5.setText("rtsp://"+et1.getText()+":"+et2.getText()+"/"+editable+"/"+et4.getText()+"?channel=1.sdp");
+                et5.setText("rtsp://"+et1.getText()+":"+et2.getText()+"/"+editable+et4.getText()+"&channel=1.sdp");
             }
         });
+
+        VersionBiz v = new VersionBiz(this);
+        String version = "";
+        try {
+            version = v.getVersionName(this);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        //tv_version.setText("v"+version);
+
+        fromUpdateVersion = (Boolean) getIntent().getBooleanExtra("fromUpdateVersion", false);
+        v.doCheckVersion(false,fromUpdateVersion);
+
+    }
+
+    public static SettingsActivity getInstance() {
+        if (instance == null) {
+            instance = new SettingsActivity();
+        }
+        return instance;
     }
 
     @Override
@@ -150,12 +208,16 @@ public class SettingsActivity extends AppCompatActivity {
 
     //点击保存 赋值  按钮 触发
     public void onOK(View view) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        //SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+
+        SharedPreferences.Editor editor = getSharedPreferences("mydata",MODE_MULTI_PROCESS).edit();
+
         editor.putString(getString(R.string.key_ip), mBinding.serverIp.getText().toString());
         editor.putString(getString(R.string.key_port), mBinding.serverPort.getText().toString());
         editor.putString(getString(R.string.key_app_name), mBinding.appName.getText().toString());
         editor.putString(getString(R.string.key_shebei), mBinding.appShebei.getText().toString());
         editor.putString(getString(R.string.key_zhen), mBinding.appZhen.getText().toString());
+
         editor.putString(getString(R.string.key_url), mBinding.appRtspUrl.getText().toString());
 
         editor.putBoolean(getString(R.string.key_udp_mode), mBinding.transportMode.isChecked());
@@ -164,6 +226,8 @@ public class SettingsActivity extends AppCompatActivity {
         editor.apply();
         finish();
     }
+
+
 
     public void onWhatIpMean(View view) {
         if (mBinding.whatIpMean.getVisibility() != View.VISIBLE) {
