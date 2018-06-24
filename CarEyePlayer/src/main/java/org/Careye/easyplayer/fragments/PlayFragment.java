@@ -78,7 +78,7 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
     public static final int RESULT_REND_STOPED = -1;
 
     protected static final String TAG = "PlayFragment";
-
+    private String isAudioSilence = "Audio";//默认打开声音播放
     /**
      * 等比例,最大化区域显示,不裁剪
      */
@@ -105,7 +105,7 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
     // TODO: Rename and change types of parameters
     protected String mUrl;
     protected int mType;
-    public CarEyePlayerClient mStreamRender;
+    public static CarEyePlayerClient mStreamRender;
     protected ResultReceiver mResultReceiver;
     protected int mWidth;
     protected int mHeight;
@@ -202,13 +202,40 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
 //                activity.onPlayFragmentClicked(PlayFragment.this);
 //            }
 //        });
-        Button btn_switch_cammars = getActivity().findViewById(R.id.btn_switch_cammars);
-        Button btn_push = getActivity().findViewById(R.id.btn_push_stop);
-        Button btn_url = getActivity().findViewById(R.id.btn_push_url);
+        Button btn_switch_cammars = getActivity().findViewById(R.id.btn_switch_cammars);//切换镜头
+        Button btn_push = getActivity().findViewById(R.id.btn_push_stop);//推流按钮
+        Button btn_url = getActivity().findViewById(R.id.btn_push_url);//显示推流Url
+        Button btn_play_audio = getActivity().findViewById(R.id.btn_play_audio);
+        Button btn_play_a = getActivity().findViewById(R.id.btn_play_a);//暂停按钮
+        Button btn_play_b = getActivity().findViewById(R.id.btn_play_b);//播放按钮
+
+
+   /*     btn_play_b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });*/
+        btn_play_audio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isAudioSilence=="Audio"){
+                    mStreamRender.setAudioEnable(false);
+                    isAudioSilence = "NoAudio";
+                }else {
+                    mStreamRender.setAudioEnable(true);
+                    isAudioSilence = "Audio";
+                }
+            }
+        });
+        btn_play_audio.setVisibility(View.VISIBLE);
+        btn_play_a.setVisibility(View.VISIBLE);
+        btn_play_b.setVisibility(View.VISIBLE);
 
         btn_switch_cammars.setVisibility(View.GONE);
         btn_url.setVisibility(View.GONE);
         btn_push.setVisibility(View.GONE);
+
         cover = (ImageView) view.findViewById(R.id.surface_cover);
 //        Glide.with(this).load(PlaylistActivity.url2localPosterFile(getActivity(), mUrl)).diskCacheStrategy(DiskCacheStrategy.NONE).placeholder(R.drawable.placeholder).into(new ImageViewTarget<GlideDrawable>(cover) {
 //            @Override
@@ -229,7 +256,12 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Button btn_switch_cammars = getActivity().findViewById(R.id.btn_switch_cammars);//切换镜头
+        Button btn_push = getActivity().findViewById(R.id.btn_push_stop);//推流按钮
+        Button btn_url = getActivity().findViewById(R.id.btn_push_url);//显示推流Url
+        btn_switch_cammars.setVisibility(View.GONE);
+        btn_url.setVisibility(View.GONE);
+        btn_push.setVisibility(View.GONE);
         mSurfaceView = (TextureView) view.findViewById(R.id.surface_view);//显示视频的控件 fragment_play.xml
 
         mSurfaceView.setOpaque(false);
@@ -460,7 +492,7 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
     protected void fixPlayerRatio(View renderView, int maxWidth, int maxHeight) {
 //        fixPlayerRatio(renderView, maxWidth, maxHeight, mWidth, mHeight);
     }
-
+    //开始渲染画面
     protected void startRending(SurfaceTexture surface) {
         mStreamRender = new CarEyePlayerClient(getContext(), KEY, new Surface(surface), mResultReceiver);
 
@@ -469,7 +501,7 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
         File f = new File(TheApp.sMoviePath);
         f.mkdirs();
 
-        try {
+        try {//启动客户端播放
             mStreamRender.start(mUrl, mType, Client.CAR_EYE_SDK_VIDEO_FRAME_FLAG | Client.CAR_EYE_SDK_AUDIO_FRAME_FLAG, "", "", autoRecord ? new File(f, new SimpleDateFormat("yy-MM-dd HH:mm:ss").format(new Date()) + ".mp4").getPath() : null);
         }catch (Exception e){
             e.printStackTrace();
@@ -477,7 +509,6 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
             return;
         }
         sendResult(RESULT_REND_STARTED, null);
-        mStreamRender.pause();
     }
 
     protected void sendResult(int resultCode, Bundle resultData) {
@@ -490,6 +521,13 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
 //        if (isHidden()){
 //            return;
 //        }
+        //相对应的按钮 隐藏2018.6.20
+        Button btn_switch_cammars = getActivity().findViewById(R.id.btn_switch_cammars);//切换镜头
+        Button btn_push = getActivity().findViewById(R.id.btn_push_stop);//推流按钮
+        Button btn_url = getActivity().findViewById(R.id.btn_push_url);//显示推流Url
+        btn_switch_cammars.setVisibility(View.GONE);
+        btn_url.setVisibility(View.GONE);
+        btn_push.setVisibility(View.GONE);
         startRending(surface);
     }
 
@@ -514,8 +552,6 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
             mStreamRender = null;
         }
     }
-
-
 
     /**
      * Called when the fragment is no longer in use.  This is called

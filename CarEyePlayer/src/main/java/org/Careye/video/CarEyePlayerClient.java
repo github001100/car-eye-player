@@ -1017,7 +1017,7 @@ public class CarEyePlayerClient implements Client.SourceCallBack {
     public void onSourceCallBack(int _channelId, int _channelPtr, int _frameType, Client.FrameInfo frameInfo) {
         long begin = SystemClock.elapsedRealtime();
         try{
-            onRTSPSourceCallBack1(_channelId, _channelPtr, _frameType, frameInfo);
+            onRTSPSourceCallBack1(_channelId, _channelPtr, _frameType, frameInfo);//
         }catch (Throwable e){
             e.printStackTrace();
         }finally {

@@ -15,7 +15,9 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.sh.camera.version.VersionBiz;
 
@@ -81,7 +83,6 @@ public class SettingsActivity extends AppCompatActivity {
         instance = this;//有用
 
         verifyStoragePermissions(getInstance());
-
 
 //        "114.55.107.180"
         //通用参数
@@ -226,8 +227,6 @@ public class SettingsActivity extends AppCompatActivity {
         editor.apply();
         finish();
     }
-
-
 
     public void onWhatIpMean(View view) {
         if (mBinding.whatIpMean.getVisibility() != View.VISIBLE) {

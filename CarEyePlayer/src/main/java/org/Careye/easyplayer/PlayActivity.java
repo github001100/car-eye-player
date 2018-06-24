@@ -44,6 +44,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -88,6 +89,8 @@ public class PlayActivity extends AppCompatActivity {
     private boolean mUpload = false;
     private int mChannel = 0;
     private Camera camera;
+    // 第一次按下返回键的事件
+    private long firstPressedTime;
 
     private final Handler mHandler = new Handler();
     private final Runnable mTimerRunnable = new Runnable() {
@@ -429,6 +432,7 @@ public class PlayActivity extends AppCompatActivity {
         //String url = getIntent().getStringExtra("play_url");//"rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov";
         //String  url = "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov00";//测试地址固定
         url = mBinding.inputUrl.getText().toString();
+        mBinding.inputUrl.clearFocus();
         myFragment = new PlayFragment();//暂时未用的的
         m_pushFragment = new PushFragment();
         Bundle bundle = new Bundle();
@@ -489,7 +493,6 @@ public class PlayActivity extends AppCompatActivity {
             mRenderFragment.quiteFullscreen();
         }
         mBinding.msgTxt.setMovementMethod(new ScrollingMovementMethod());//显示一些日志信息
-
         mBinding.toolbarSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -506,11 +509,58 @@ public class PlayActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), AboutActivity.class));
             }
         });
-        SharedPreferences pref = getSharedPreferences("mydata",MODE_MULTI_PROCESS);
-        final String sip = pref.getString(getString(R.string.key_ip),"192.168.0.110");
-        final String key_port = pref.getString(getString(R.string.key_port),"8888");
-        final String key_app_name = pref.getString(getString(R.string.key_app_name),"");
 
+        SharedPreferences pref = getSharedPreferences("mydata", MODE_MULTI_PROCESS);
+        final String sip = pref.getString(getString(R.string.key_ip), "192.168.0.110");
+        final String key_port = pref.getString(getString(R.string.key_port), "8888");
+        final String key_app_name = pref.getString(getString(R.string.key_app_name), "");
+
+        mBinding.btnPlayA.setOnClickListener(new View.OnClickListener() {
+            int a = 1;
+
+            @Override
+            public void onClick(View view) {
+                if (a == 1) {
+                    mRenderFragment.mStreamRender.pause();//暂停播放
+                    a = 2;
+                } else {
+                    mRenderFragment.mStreamRender.resume();
+                    a = 1;
+                }
+
+            }
+        });
+        //开始播放视频
+        mBinding.btnPlayB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                url = mBinding.inputUrl.getText().toString();
+                ResultReceiver rr = getIntent().getParcelableExtra("rr");
+                if (rr == null) {
+                    rr = new ResultReceiver(new Handler()) {
+                        @Override
+                        protected void onReceiveResult(int resultCode, Bundle resultData) {
+                            super.onReceiveResult(resultCode, resultData);
+                            if (resultCode == PlayFragment.RESULT_REND_STARTED) {
+                                onPlayStart();
+                            } else if (resultCode == PlayFragment.RESULT_REND_STOPED) {
+                                onPlayStoped();
+                            } else if (resultCode == PlayFragment.RESULT_REND_VIDEO_DISPLAYED) {
+                                onVideoDisplayed();
+                            }
+                        }
+                    };
+                }
+                // useUDP = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.key_udp_mode), false);
+                PlayFragment fragment = PlayFragment.newInstance(url, useUDP ? Client.TRANSTYPE_UDP : Client.TRANSTYPE_TCP, rr);//创建PlayFragment 实例
+                getSupportFragmentManager().beginTransaction().add(R.id.render_holder, fragment).commit();
+                mRenderFragment = fragment;
+
+                //mRenderFragment = (PlayFragment) getSupportFragmentManager().findFragmentById(R.id.render_holder);
+
+                Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
+            }
+        });
         //点击内 推流
         mBinding.btnPushStop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -558,7 +608,7 @@ public class PlayActivity extends AppCompatActivity {
                 }
             }
         });
-        //暂停
+        //工具栏暂停按钮
         mBinding.toolbarAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -566,7 +616,7 @@ public class PlayActivity extends AppCompatActivity {
                 mRenderFragment.mStreamRender.pause();//暂停播放
             }
         });
-        //播放
+        //工具兰播放按钮图标
         mBinding.toolbarPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -693,7 +743,9 @@ public class PlayActivity extends AppCompatActivity {
         });
 
     }
-
+    public void OnClickTest(View view){
+        Toast.makeText(getApplicationContext(),"暂未开发，敬请期待",Toast.LENGTH_SHORT).show();
+    }
     private void onVideoDisplayed() {
         mBinding.liveVideoBar.liveVideoBarTakePicture.setEnabled(true);
         mBinding.liveVideoBar.liveVideoBarRecord.setEnabled(true);
@@ -818,7 +870,7 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() {//后台进成
         WindowManager.LayoutParams attrs = getWindow().getAttributes();
         if ((attrs.flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) == WindowManager.LayoutParams.FLAG_FULLSCREEN) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -830,6 +882,14 @@ public class PlayActivity extends AppCompatActivity {
 
             return;
         }
+
+        // System.currentTimeMillis() 当前系统的时间
+        /*if (System.currentTimeMillis() - firstPressedTime < 2000) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(PlayActivity.this, "再按一次退出Car-eye", Toast.LENGTH_SHORT).show();
+            firstPressedTime = System.currentTimeMillis();
+        }*/
         super.onBackPressed();
     }
 }
