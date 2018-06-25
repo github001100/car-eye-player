@@ -151,9 +151,9 @@ public class PushFragment extends Fragment implements TextureView.SurfaceTexture
         //final String a = getString(R.string.key_ip);
 
         SharedPreferences pref = getActivity().getSharedPreferences("mydata", MODE_MULTI_PROCESS);
-        final String sip = pref.getString(getString(R.string.key_ip), "192.168.0.110");
-        final String key_port = pref.getString(getString(R.string.key_port), "8888");
-        final String key_app_name = pref.getString(getString(R.string.key_app_name), "");
+        final String sip = pref.getString(getString(R.string.key_ip), "www.car-eye.cn");
+        final String key_port = pref.getString(getString(R.string.key_port), "10554");
+        final String key_app_name = pref.getString(getString(R.string.key_app_name), "demo");
 
         final String key_url = pref.getString(getString(R.string.key_url), "rtsp://www.car-eye.cn:10554/demo&channel=1.sdp");//demo
 
@@ -175,8 +175,8 @@ public class PushFragment extends Fragment implements TextureView.SurfaceTexture
                 //btn_push.setText("停止");
                 btn_url.setVisibility(View.VISIBLE);
 
-                //btn_url.setText("rtsp://" + sip + ":" + key_port + "/" + key_app_name + ".sdp".toLowerCase());
-                btn_url.setText(key_url);
+                btn_url.setText("rtsp://" + sip + ":" + key_port + "/" + key_app_name + ".sdp".toLowerCase());
+               // btn_url.setText(key_url);
                 if (flag == 0 && mUpload == true) {
                     btn_push.setText("推流");
                     StopVideoUpload(mChannel);

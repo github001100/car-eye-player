@@ -1,14 +1,7 @@
-/*
- * Car eye 车辆管理平台: www.car-eye.cn
- * Car eye 开源网址: https://github.com/Car-eye-team
- * CarEyeRtmpAPI.c
- *
- * Author: Wgj
- * Date: 2018-03-19 19:15
- * Copyright 2018
- *
- * CarEye RTMP推流库接口实现
- * 实时推送数据时候支持最大8个通道的流
+/*  car eye 杞﹁締绠＄悊骞冲彴
+ * car-eye绠＄悊骞冲彴   www.car-eye.cn
+ * car-eye寮€婧愮綉鍧€:  https://github.com/Car-eye-team
+ * Copyright
  */
 package org.Careye.push.audio;
 
@@ -79,7 +72,7 @@ public class AudioStream {
     }
 
     /**
-     * 编码
+     * 缂栫爜
      */
     public void startRecord() {
         mThread = new Thread(new Runnable() {
@@ -133,10 +126,10 @@ public class AudioStream {
                                 mBuffer.position(7 + mBufferInfo.size);
                                 addADTStoPacket(mBuffer.array(), mBufferInfo.size + 7);
                                 mBuffer.flip();
-                                easyPusher.SendBuffer_org(mBuffer.array(), mBufferInfo.size + 7, mBufferInfo.presentationTimeUs / 1000, 1, m_index);	                                            
-	                            mMediaCodec.releaseOutputBuffer(index, false);
-	                            break;
-	                            
+                                easyPusher.SendBuffer_org(mBuffer.array(), mBufferInfo.size + 7, mBufferInfo.presentationTimeUs / 1000, 1, m_index);
+                                mMediaCodec.releaseOutputBuffer(index, false);
+                                break;
+
                             } else if (index == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) {
                                 mBuffers = mMediaCodec.getOutputBuffers();
                             } else if (index == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
@@ -179,7 +172,7 @@ public class AudioStream {
         packet[5] = (byte) (((packetLen & 7) << 5) + 0x1F);
         packet[6] = (byte) 0xFC;
     }
-    
+
     public void stop() {
         try {
             Thread t = mThread;

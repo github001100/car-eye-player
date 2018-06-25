@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.sh.camera.version.VersionBiz;
+//import com.sh.camera.version.VersionBiz;
 
 import org.Careye.rtsp.player.R;
 import org.Careye.rtsp.player.databinding.ActivitySettingBinding;
@@ -180,7 +180,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        VersionBiz v = new VersionBiz(this);
+       /* VersionBiz v = new VersionBiz(this);
         String version = "";
         try {
             version = v.getVersionName(this);
@@ -191,7 +191,7 @@ public class SettingsActivity extends AppCompatActivity {
         //tv_version.setText("v"+version);
 
         fromUpdateVersion = (Boolean) getIntent().getBooleanExtra("fromUpdateVersion", false);
-        v.doCheckVersion(false,fromUpdateVersion);
+        v.doCheckVersion(false,fromUpdateVersion);*/
 
     }
 

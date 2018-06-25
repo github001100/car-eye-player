@@ -13,10 +13,8 @@
 package org.Careye.push.codec;
 
 import android.content.Context;
-import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.media.MediaCodec;
-
 import org.Careye.push.audio.AudioStream;
 import org.Careye.push.push.Pusher;
 import  org.Careye.push.util.Constants;
@@ -91,7 +89,6 @@ public void onPreviewFrameUpload(byte[] data,int index,Camera camera){
 		 camera.addCallbackBuffer(data);
          return;
      }
-     Camera.Size previewSize = camera.getParameters().getPreviewSize();
      if (data.length != Constants.UPLOAD_VIDEO_HEIGHT * Constants.UPLOAD_VIDEO_WIDTH * 3 / 2) {
     	 camera.addCallbackBuffer(data);
 	   	 return;
