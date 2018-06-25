@@ -1,1 +1,1 @@
-include ':CarEyePlayer',':library', ':careyepusher'
+include ':CarEyePlayer'
