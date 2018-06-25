@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical"
         tools:context="org.Careye.easyplayer.PlayActivity">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:logo="@mipmap/ic_launcher">
+            <!-- <ImageView
+                 android:layout_width="30dp"
+                 android:layout_height="30dp"
+                 android:layout_marginLight="52"
+                 />-->
+            <TextView
+                android:layout_width="98dp"
+                android:layout_height="match_parent"
+                android:text="Car-eye-Player"
+                android:textSize="14dp" />
 
             <ImageButton
                 android:id="@+id/toolbar_help"
@@ -19,13 +34,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:src="@android:drawable/ic_menu_help" />
+
             <ImageButton
-                android:layout_width="wrap_content"
-                android:src="@drawable/ic_action_setting"
                 android:id="@+id/toolbar_setting"
                 style="@style/Base.Widget.AppCompat.ActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_height="wrap_content" />
+                android:src="@drawable/ic_action_setting" />
             <!--  <ImageButton
                   android:layout_width="wrap_content"
                   android:src="@drawable/ic_action_multiplay"
@@ -40,27 +56,48 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:src="@android:drawable/ic_media_pause" />
+                android:src="@android:drawable/ic_media_pause"
+                android:visibility="gone" />
+
             <ImageButton
                 android:id="@+id/toolbar_play"
                 style="@style/Base.Widget.AppCompat.ActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:src="@android:drawable/ic_media_play" />
+                android:src="@android:drawable/ic_media_play"
+                android:visibility="gone" />
         </android.support.v7.widget.Toolbar>
+
         <EditText
             android:id="@+id/input_url"
-            android:text="rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:hint="请输入RTSP地址"
-            />
+            android:text="rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mo" />
 
         <FrameLayout
             android:id="@+id/render_holder"
             android:layout_width="match_parent"
-            android:layout_height="274dp">
+            android:layout_height="275dp">
+
+            <Button
+                android:id="@+id/btn_play_a"
+                android:layout_width="28dp"
+                android:layout_height="26dp"
+                android:layout_marginLeft="78dp"
+                android:layout_marginTop="244dp"
+                android:background="@android:drawable/ic_media_pause"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/btn_play_b"
+                android:layout_width="28dp"
+                android:layout_height="26dp"
+                android:layout_marginLeft="44dp"
+                android:layout_marginTop="244dp"
+                android:background="@android:drawable/ic_media_play"
+                android:visibility="visible" />
 
             <Button
                 android:id="@+id/btn_switch_cammars"
@@ -76,20 +113,28 @@
                 android:layout_width="60dp"
                 android:layout_height="26dp"
                 android:layout_marginTop="244dp"
-                android:background="#706d6c"
+                android:background="@drawable/btn_nor_down"
                 android:text="推送"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btn_play_audio"
+                android:layout_width="28dp"
+                android:layout_height="26dp"
+                android:layout_marginTop="244dp"
+                android:background="@android:drawable/ic_lock_silent_mode"
                 android:visibility="visible" />
 
             <Button
                 android:id="@+id/btn_push_url"
                 android:layout_width="match_parent"
                 android:layout_height="26dp"
+                android:layout_gravity="start"
                 android:layout_marginTop="200dp"
                 android:background="@android:color/transparent"
-                android:layout_gravity="start"
+                android:text="显示Url"
                 android:textAlignment="textStart"
                 android:textAllCaps="false"
-                android:text="显示Url"
                 android:textColor="#de4e4e"
                 android:visibility="gone" />
 
@@ -115,6 +160,7 @@
                 android:scrollbars="vertical"
                 android:text="" />
         </LinearLayout>
+
         <include
             android:id="@+id/live_video_bar"
             layout="@layout/live_video_bar_ref"></include>
@@ -125,24 +171,43 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             android:showDividers="middle">
+
             <Button
                 android:id="@+id/btn_player"
-                android:layout_width="120dp"
-                android:layout_height="45dp"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_margin="5dip"
+                android:layout_weight="1"
+                android:background="@drawable/btn_bg_red"
+                android:gravity="center"
                 android:text="播放器" />
 
             <Button
                 android:id="@+id/btn_pusher"
-                android:layout_width="120dp"
-                android:layout_height="50dp"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_margin="5dip"
+                android:layout_weight="1"
+                android:background="@drawable/btn_bg_red"
+                android:gravity="center"
                 android:text="推流器" />
 
             <Button
                 android:id="@+id/btn_pusher_play"
                 android:layout_width="120dp"
                 android:layout_height="50dp"
-                android:visibility="gone"
-                android:text="推流" />
+                android:text="推流"
+                android:visibility="gone" />
+
+            <Button
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_margin="5dip"
+                android:layout_weight="1"
+                android:background="@drawable/btn_bg_red"
+                android:gravity="center"
+                android:onClick="OnClickTest"
+                android:text="控制器" />
 
         </LinearLayout>
 

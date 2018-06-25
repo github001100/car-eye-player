@@ -12,6 +12,7 @@
  */
 package org.Careye.easyplayer.fragments;
 
+import android.content.ClipboardManager;
 import android.content.SharedPreferences;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
@@ -21,11 +22,13 @@ import android.os.ResultReceiver;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.Careye.rtsp.player.R;
 import org.Careye.push.codec.MediaCodecManager;
@@ -33,11 +36,13 @@ import org.Careye.push.hw.EncoderDebugger;
 import org.Careye.push.hw.NV21Convertor;
 import org.Careye.push.push.Pusher;
 import org.Careye.push.util.Constants;
+import org.Careye.video.CarEyePlayerClient;
 
 import java.io.IOException;
 
 import static android.content.Context.MODE_MULTI_PROCESS;
 import static org.Careye.easyplayer.fragments.PlayFragment.ARG_PARAM3;
+import static org.Careye.easyplayer.fragments.PlayFragment.KEY;
 
 public class PushFragment extends Fragment implements TextureView.SurfaceTextureListener {
     private Camera mCamera;
@@ -52,12 +57,23 @@ public class PushFragment extends Fragment implements TextureView.SurfaceTexture
     private boolean mUpload = false;
     private int mChannel = 0;
     int flag = 1;
+    public CarEyePlayerClient mStreamRender;
+    protected ResultReceiver mResultReceiver;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1200);
         debugger = EncoderDebugger.debug(getActivity(), Constants.RECORD_VIDEO_WIDTH, Constants.RECORD_VIDEO_HEIGHT);
         mPusher = new Pusher();
+
+        //播放功能按钮隐藏
+        Button btn_play_audio = getActivity().findViewById(R.id.btn_play_audio);
+        Button btn_play_a = getActivity().findViewById(R.id.btn_play_a);
+        Button btn_play_b = getActivity().findViewById(R.id.btn_play_b);
+        btn_play_audio.setVisibility(View.GONE);
+        btn_play_a.setVisibility(View.GONE);
+        btn_play_b.setVisibility(View.GONE);
+
         LinearLayout view = new LinearLayout(getActivity());
         view.setLayoutParams(lp);
         mTextureView = new TextureView(getActivity());
@@ -110,6 +126,7 @@ public class PushFragment extends Fragment implements TextureView.SurfaceTexture
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
 
+        PlayFragment.mStreamRender.setAudioEnable(false);
         mCamera = Camera.open(mCameraId);//
 
         Camera.Parameters parameters = mCamera.getParameters();
@@ -138,11 +155,20 @@ public class PushFragment extends Fragment implements TextureView.SurfaceTexture
         final String key_port = pref.getString(getString(R.string.key_port), "8888");
         final String key_app_name = pref.getString(getString(R.string.key_app_name), "");
 
-        final String key_url = pref.getString(getString(R.string.key_url), "rtsp://www.car-eye.cn:10554/demo&channel=1.sdp");
+        final String key_url = pref.getString(getString(R.string.key_url), "rtsp://www.car-eye.cn:10554/demo&channel=1.sdp");//demo
 
         btn_switch_cammars.setVisibility(View.VISIBLE);
         btn_push.setVisibility(View.VISIBLE);
+        btn_url.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
 
+                ClipboardManager cm =(ClipboardManager)getContext().getSystemService(getContext().CLIPBOARD_SERVICE);
+                cm.setText(btn_url.getText().toString());
+                Toast.makeText(getContext(),"已复制",Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
         btn_push.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
