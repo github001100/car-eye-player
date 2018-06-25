@@ -109,13 +109,13 @@ public class YUVExportFragment extends PlayFragment implements CarEyePlayerClien
         }
     }
 
-    @Override
-    public void onMatrixChanged(Matrix matrix, RectF rect) {
-        super.onMatrixChanged(matrix, rect);
-        if (canvas != null) {
-            canvas.setTransMatrix(matrix);
-        }
-    }
+//    @Override
+//    public void onMatrixChanged(Matrix matrix, RectF rect) {
+//        super.onMatrixChanged(matrix, rect);
+//        if (canvas != null) {
+//            canvas.setTransMatrix(matrix);
+//        }
+//    }
 
     public void toggleDraw() {
         canvas.toggleDrawable();

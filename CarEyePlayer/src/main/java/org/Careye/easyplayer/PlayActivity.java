@@ -511,9 +511,9 @@ public class PlayActivity extends AppCompatActivity {
         });
 
         SharedPreferences pref = getSharedPreferences("mydata", MODE_MULTI_PROCESS);
-        final String sip = pref.getString(getString(R.string.key_ip), "192.168.0.110");
-        final String key_port = pref.getString(getString(R.string.key_port), "8888");
-        final String key_app_name = pref.getString(getString(R.string.key_app_name), "");
+        final String sip = pref.getString(getString(R.string.key_ip), Constants.SERVER_IP);
+        final String key_port = pref.getString(getString(R.string.key_port), Constants.SERVER_PORT);
+        final String key_app_name = pref.getString(getString(R.string.key_app_name), Constants.RTMP_APP);
 
         mBinding.btnPlayA.setOnClickListener(new View.OnClickListener() {
             int a = 1;

@@ -65,9 +65,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import uk.copywitchshame.senab.photoview.gestures.PhotoViewAttacher;
 
-public class PlayFragment extends Fragment implements TextureView.SurfaceTextureListener, PhotoViewAttacher.OnMatrixChangedListener {
+public class PlayFragment extends Fragment implements TextureView.SurfaceTextureListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String ARG_PARAM1 = "param1";
@@ -110,7 +109,7 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
     protected int mWidth;
     protected int mHeight;
     protected View.OnLayoutChangeListener listener;
-    private PhotoViewAttacher mAttacher;
+    //private PhotoViewAttacher mAttacher;
     public  TextureView mSurfaceView;
     private AngleView mAngleView;
     private MediaScannerConnection mScanner;
@@ -339,33 +338,33 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
 
 
     public void enterFullscreen() {
-        mFullscreenMode = true;
-        if (getView() == null){
-            return;
-        }
-        if (mAttacher != null) {
-            mAttacher.cleanup();
-        } mSurfaceView.setTransform(new Matrix());
-        mAngleView.setVisibility(View.GONE);
+//        mFullscreenMode = true;
+//        if (getView() == null){
+//            return;
+//        }
+//        if (mAttacher != null) {
+//            mAttacher.cleanup();
+//        } mSurfaceView.setTransform(new Matrix());
+//        mAngleView.setVisibility(View.GONE);
     }
 
     public void quiteFullscreen() {
-        mFullscreenMode = false;
-        if (getView() == null){
-            return;
-        }
-        if (mAttacher != null) {
-            mAttacher.cleanup();
-        }
-        ViewGroup parent = (ViewGroup) getView().getParent();
-        parent.addOnLayoutChangeListener(listener);
-        fixPlayerRatio(getView(), parent.getWidth(), parent.getHeight());
+//        mFullscreenMode = false;
+//        if (getView() == null){
+//            return;
+//        }
+//        if (mAttacher != null) {
+//            //mAttacher.cleanup();
+//        }
+//        ViewGroup parent = (ViewGroup) getView().getParent();
+//        parent.addOnLayoutChangeListener(listener);
+//        fixPlayerRatio(getView(), parent.getWidth(), parent.getHeight());
 
 
-        mAttacher = new PhotoViewAttacher(mSurfaceView, mWidth, mHeight);
-        mAttacher.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        mAttacher.setOnMatrixChangeListener(PlayFragment.this);
-        mAttacher.update();
+        //mAttacher = new PhotoViewAttacher(mSurfaceView, mWidth, mHeight);
+        //mAttacher.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        //mAttacher.setOnMatrixChangeListener(PlayFragment.this);
+        //mAttacher.update();
         //修改隐藏角度标
         //  mAngleView.setVisibility(View.VISIBLE);
     }
@@ -373,20 +372,20 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
     private void onVideoSizeChange() {
         Log.i(TAG, String.format("RESULT_VIDEO_SIZE RECEIVED :%d*%d", mWidth, mHeight));
         if (mWidth == 0 || mHeight == 0) return;
-        if (mAttacher != null){
-            mAttacher.cleanup();
-            mAttacher = null;
-        }
+//        if (mAttacher != null){
+//            //mAttacher.cleanup();
+//            mAttacher = null;
+//        }
         if (mRatioType == ASPACT_RATIO_CROPE_MATRIX) {
             ViewGroup parent = (ViewGroup) getView().getParent();
             parent.addOnLayoutChangeListener(listener);
             fixPlayerRatio(getView(), parent.getWidth(), parent.getHeight());
             mSurfaceView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
             mSurfaceView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-            mAttacher = new PhotoViewAttacher(mSurfaceView, mWidth, mHeight);
-            mAttacher.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            mAttacher.setOnMatrixChangeListener(PlayFragment.this);
-            mAttacher.update();
+            //mAttacher = new PhotoViewAttacher(mSurfaceView, mWidth, mHeight);
+            //mAttacher.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            //mAttacher.setOnMatrixChangeListener(PlayFragment.this);
+            //mAttacher.update();
             //修改隐藏角度标
           //  mAngleView.setVisibility(View.VISIBLE);
         }else {
@@ -533,9 +532,9 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-        if (mAttacher != null) {
-            mAttacher.update();
-        }
+//        if (mAttacher != null) {
+//            //mAttacher.update();
+//        }
     }
 
     @Override
@@ -568,13 +567,13 @@ public class PlayFragment extends Fragment implements TextureView.SurfaceTexture
 
     }
 
-    @Override
-    public void onMatrixChanged(Matrix matrix, RectF rect) {
-        float maxMovement = (rect.width() - mSurfaceView.getWidth());
-        float middle = mSurfaceView.getWidth() * 0.5f + mSurfaceView.getLeft();
-        float currentMiddle = rect.width() * 0.5f + rect.left;
-        mAngleView.setCurrentProgress(-(int) ((currentMiddle - middle) * 100 / maxMovement));
-    }
+//    @Override
+//    public void onMatrixChanged(Matrix matrix, RectF rect) {
+//        float maxMovement = (rect.width() - mSurfaceView.getWidth());
+//        float middle = mSurfaceView.getWidth() * 0.5f + mSurfaceView.getLeft();
+//        float currentMiddle = rect.width() * 0.5f + rect.left;
+//        mAngleView.setCurrentProgress(-(int) ((currentMiddle - middle) * 100 / maxMovement));
+//    }
 
     /**
      * 抓拍
