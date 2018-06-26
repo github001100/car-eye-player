@@ -1,19 +1,9 @@
 /*
  * Car eye 车辆管理平台: www.car-eye.cn
  * Car eye 开源网址: https://github.com/Car-eye-team
- * CarEyeRtmpAPI.c
- *
- * Author: Wgj
- * Date: 2018-03-19 19:15
- * Copyright 2018
- *
- * CarEye RTMP推流库接口实现
- * 实时推送数据时候支持最大8个通道的流
- */
-package org.Careye.easyplayer.fragments;
-
-import android.graphics.Matrix;
-import android.graphics.RectF;
+  * Copyright 2018
+*/
+package org.Careye.CarEyePlayer.fragments;
 import android.graphics.SurfaceTexture;
 import android.os.Bundle;
 import android.os.ResultReceiver;
@@ -25,13 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import org.Careye.easyplayer.TheApp;
-import org.Careye.easyplayer.views.OverlayCanvasView;
+import org.Careye.CarEyePlayer.TheApp;
+import org.Careye.CarEyePlayer.views.OverlayCanvasView;
 import org.Careye.video.Client;
 import org.Careye.video.CarEyePlayerClient;
 import org.Careye.rtsp.player.R;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
@@ -61,19 +49,15 @@ public class YUVExportFragment extends PlayFragment implements CarEyePlayerClien
         final View view = inflater.inflate(R.layout.fragment_play_overlay_canvas, container, false);
         cover = (ImageView) view.findViewById(R.id.surface_cover);
         canvas = view.findViewById(R.id.overlay_canvas);
-
         return view;
     }
 
     @Override
     protected void startRending(SurfaceTexture surface) {
         mStreamRender = new CarEyePlayerClient(getContext(), KEY, new Surface(surface), mResultReceiver, this);
-
         boolean autoRecord = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("auto_record", false);
-
         File f = new File(TheApp.sMoviePath);
         f.mkdirs();
-
         try {
             mStreamRender.start(mUrl, mType, Client.CAR_EYE_SDK_VIDEO_FRAME_FLAG | Client.CAR_EYE_SDK_AUDIO_FRAME_FLAG, "", "", autoRecord ? new File(f, new SimpleDateFormat("yy-MM-dd HH:mm:ss").format(new Date()) + ".mp4").getPath() : null);
         }catch (Exception e){

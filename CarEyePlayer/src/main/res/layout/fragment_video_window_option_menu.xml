@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#66000000"
-    tools:context="org.Careye.easyplayer.VideoWindowOptionMenuFragment">
+    tools:context="org.Careye.CarEyePlayer.VideoWindowOptionMenuFragment">
 
     <LinearLayout
         android:id="@+id/option_container"

@@ -1,8 +1,8 @@
-/*  car eye 杞﹁締绠＄悊骞冲彴
- * car-eye绠＄悊骞冲彴   www.car-eye.cn
- * car-eye寮€婧愮綉鍧€:  https://github.com/Car-eye-team
- * Copyright
- */
+/*
+ * Car eye 车辆管理平台: www.car-eye.cn
+ * Car eye 开源网址: https://github.com/Car-eye-team
+  * Copyright 2018
+*/
 package org.Careye.push.audio;
 
 import android.media.AudioFormat;

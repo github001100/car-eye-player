@@ -1,16 +1,9 @@
 /*
  * Car eye 车辆管理平台: www.car-eye.cn
  * Car eye 开源网址: https://github.com/Car-eye-team
- * CarEyeRtmpAPI.c
- *
- * Author: Wgj
- * Date: 2018-03-19 19:15
- * Copyright 2018
- *
- * CarEye RTMP推流库接口实现
- * 实时推送数据时候支持最大8个通道的流
- */
-package org.Careye.easyplayer;
+  * Copyright 2018
+*/
+package org.Careye.CarEyePlayer;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -38,12 +31,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
 
-import org.Careye.easyplayer.data.VideoSource;
+import org.Careye.CarEyePlayer.data.VideoSource;
 import org.Careye.rtsp.player.BuildConfig;
 import org.Careye.rtsp.player.R;
 import org.Careye.rtsp.player.databinding.ContentPlaylistBinding;
@@ -70,7 +62,7 @@ public class PlaylistActivity extends AppCompatActivity implements View.OnClickL
     private int mPos;
     private ContentPlaylistBinding mBinding;
     private Cursor mCursor;
-    //private UpdateMgr update;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,16 +1,9 @@
 /*
  * Car eye 车辆管理平台: www.car-eye.cn
  * Car eye 开源网址: https://github.com/Car-eye-team
- * CarEyeRtmpAPI.c
- *
- * Author: Wgj
- * Date: 2018-03-19 19:15
- * Copyright 2018
- *
- * CarEye RTMP推流库接口实现
- * 实时推送数据时候支持最大8个通道的流
- */
-package org.Careye.easyplayer.fragments;
+  * Copyright 2018
+*/
+package org.Careye.CarEyePlayer.fragments;
 
 
 import android.opengl.GLSurfaceView;
@@ -31,8 +24,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
 
 import org.Careye.video.CarEyePlayerClient;
-import org.Careye.easyplayer.PlayActivity;
-import org.Careye.easyplayer.PlaylistActivity;
+import org.Careye.CarEyePlayer.PlayActivity;
+import org.Careye.CarEyePlayer.PlaylistActivity;
 import org.Careye.rtsp.player.R;
 
 import java.util.UUID;

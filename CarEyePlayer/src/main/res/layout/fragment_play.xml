@@ -29,7 +29,7 @@
         android:visibility="gone"
         />
 
-    <org.Careye.easyplayer.views.AngleView
+    <org.Careye.CarEyePlayer.views.AngleView
         android:id="@+id/render_angle_view"
         android:layout_width="100dp"
         android:layout_height="50dp"

@@ -20,7 +20,7 @@
         android:layout_height="match_parent" />
 
 
-    <org.Careye.easyplayer.views.OverlayCanvasView
+    <org.Careye.CarEyePlayer.views.OverlayCanvasView
         android:id="@+id/overlay_canvas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
-    <org.Careye.easyplayer.views.AngleView
+    <org.Careye.CarEyePlayer.views.AngleView
         android:id="@+id/render_angle_view"
         android:layout_width="100dp"
         android:layout_height="50dp"

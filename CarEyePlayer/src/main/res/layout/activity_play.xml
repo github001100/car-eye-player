@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <fragment
-        android:name="org.Careye.easyplayer.fragments.PlayFragment"
+        android:name="org.Careye.CarEyePlayer.fragments.PlayFragment"
         android:layout_width="match_parent"
         android:layout_height="316dp"
         tools:layout="@layout/fragment_play"></fragment>

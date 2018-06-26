@@ -9,7 +9,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="vertical"
-        tools:context="org.Careye.easyplayer.PlayActivity">
+        tools:context="org.Careye.CarEyePlayer.PlayActivity">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="请输入RTSP地址"
-            android:text="rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mo" />
+            android:text="rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov" />
 
         <FrameLayout
             android:id="@+id/render_holder"
@@ -128,7 +128,7 @@
             <Button
                 android:id="@+id/btn_push_url"
                 android:layout_width="match_parent"
-                android:layout_height="26dp"
+                android:layout_height="52dp"
                 android:layout_gravity="start"
                 android:layout_marginTop="200dp"
                 android:background="@android:color/transparent"

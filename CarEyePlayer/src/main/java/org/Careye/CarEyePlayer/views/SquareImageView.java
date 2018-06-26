@@ -1,4 +1,4 @@
-package org.Careye.easyplayer.views;
+package org.Careye.CarEyePlayer.views;
 
 import android.content.Context;
 import android.os.Build;

@@ -1,4 +1,4 @@
-package org.Careye.easyplayer;
+package org.Careye.CarEyePlayer;
 
 
 import android.app.Activity;
@@ -9,15 +9,12 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 //import com.sh.camera.version.VersionBiz;
 
@@ -82,37 +79,20 @@ public class SettingsActivity extends AppCompatActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_setting);
         SharedPreferences pref = getSharedPreferences("mydata",MODE_MULTI_PROCESS);
         instance = this;//有用
-
         verifyStoragePermissions(getInstance());
-
-//        "114.55.107.180"
         //通用参数
         mBinding.serverIp.setText(pref.getString(getString(R.string.key_ip), TheApp.DEFAULT_SERVER_IP));//默认 服务器IP 0.0.0.0  PreferenceManager.getDefaultSharedPreferences(this)
-        mBinding.serverPort.setText(pref.getString(getString(R.string.key_port), "10008"));
+        mBinding.serverPort.setText(pref.getString(getString(R.string.key_port), "10554"));
         //推流器设置 参数
         mBinding.appName.setText(pref.getString(getString(R.string.key_app_name), "key_app_name"));
-        mBinding.appShebei.setText(pref.getString(getString(R.string.key_shebei), "key_shebei"));
+        mBinding.appShebei.setText(pref.getString(getString(R.string.key_shebei), "123456"));
         mBinding.appZhen.setText(pref.getString(getString(R.string.key_zhen), "20"));
-        mBinding.appRtspUrl.setText(pref.getString(getString(R.string.key_url), "RTSP://www.car-eye.cn"));
+        mBinding.appRtspUrl.setText(pref.getString(getString(R.string.key_url), "RTSP://www.car-eye.cn:10554/123456&channel=1.sdp"));
 
         mBinding.transportMode.setChecked(pref.getBoolean(getString(R.string.key_udp_mode), false));
         mBinding.autoRecord.setChecked(pref.getBoolean("auto_record", false));
         mBinding.swCodec.setChecked(pref.getBoolean("use-sw-codec", false));
 
-        //推流服务器相关信息 by fu 2018 6 8
-        /*mBinding.serverIp.setText(ServerManager.getInstance().getIp());
-        mBinding.serverPort.setText(ServerManager.getInstance().getPort());
-        mBinding.appName.setText(ServerManager.getInstance().getapp());//应用名
-        //mBinding.appZhen.setText(ServerManager.getInstance().getFramerate());
-        mBinding.appShebei.setText(ServerManager.getInstance().getStreamname());//设备号
-        mBinding.appRtspUrl.setText(ServerManager.getInstance().getURL());//推流RTSP 地址*/
-
-       /* mBinding.serverIp.setText(Constants.SERVER_IP);
-        mBinding.serverPort.setText(Constants.SERVER_PORT);
-        mBinding.appName.setText(Constants.RTMP_APP);
-        mBinding.appZhen.setText(String.valueOf(Constants.FRAMERATE));
-        mBinding.appShebei.setText(Constants.STREAM_NAME);
-        mBinding.appRtspUrl.setText(Constants.Default_URL);*/
         et1 = (EditText) findViewById(R.id.server_ip);
         et2 = (EditText) findViewById(R.id.server_port);
         et3 = (EditText) findViewById(R.id.app_name);

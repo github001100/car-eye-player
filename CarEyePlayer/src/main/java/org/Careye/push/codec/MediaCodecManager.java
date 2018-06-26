@@ -1,18 +1,12 @@
 /*
  * Car eye 车辆管理平台: www.car-eye.cn
  * Car eye 开源网址: https://github.com/Car-eye-team
- * CarEyeRtmpAPI.c
- *
- * Author: Wgj
- * Date: 2018-03-19 19:15
- * Copyright 2018
- *
- * CarEye RTMP推流库接口实现
- * 实时推送数据时候支持最大8个通道的流
- */
+  * Copyright 2018
+*/
 package org.Careye.push.codec;
 
 import android.content.Context;
+import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.media.MediaCodec;
 import org.Careye.push.audio.AudioStream;
@@ -63,7 +57,10 @@ public class MediaCodecManager {
 	 */
  public void StartUpload(Context context, int index, Pusher mPusher)
  {
-     mVC = new HWConsumer(context, mPusher, index);
+	 debugger = EncoderDebugger.debug(context, Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
+	 previewFormat = sw_codec ? ImageFormat.YV12 : debugger.getNV21Convertor().getPlanar() ? ImageFormat.YV12 : ImageFormat.NV21;
+
+	 mVC = new HWConsumer(context, mPusher, index);
 	 try {
 		mVC.onVideoStart(Constants.UPLOAD_VIDEO_WIDTH, Constants.UPLOAD_VIDEO_HEIGHT);
 	} catch (IOException e) {

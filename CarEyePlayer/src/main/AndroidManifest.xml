@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
     <!--EasyPlayer RTSP-->
     <application
-        android:name="org.Careye.easyplayer.TheApp"
+        android:name="org.Careye.CarEyePlayer.TheApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="car-eye-player"
@@ -37,20 +37,20 @@
             android:value="@string/app_flavor" />
 
         <activity
-            android:name="org.Careye.easyplayer.PlaylistActivity"
+            android:name="org.Careye.CarEyePlayer.PlaylistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="org.Careye.easyplayer.TwoWndPlayActivity"
+            android:name="org.Careye.CarEyePlayer.TwoWndPlayActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="org.Careye.easyplayer.YUVExportActivity"
+            android:name="org.Careye.CarEyePlayer.YUVExportActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
-            android:name="org.Careye.easyplayer.SettingsActivity"
+            android:name="org.Careye.CarEyePlayer.SettingsActivity"
             android:label="@string/title_activity_settings" />
 
         <activity
-            android:name="org.Careye.easyplayer.PlayActivity"
+            android:name="org.Careye.CarEyePlayer.PlayActivity"
             android:label="car-eye-player">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -58,16 +58,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.Careye.easyplayer.SplashActivity"
+            android:name="org.Careye.CarEyePlayer.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_splash"
             android:theme="@style/FullscreenTheme" />
         <activity
-            android:name="org.Careye.easyplayer.MediaFilesActivity"
+            android:name="org.Careye.CarEyePlayer.MediaFilesActivity"
             android:label="文件夹" />
 
 
-        <activity android:name="org.Careye.easyplayer.AboutActivity"></activity>
+        <activity android:name="org.Careye.CarEyePlayer.AboutActivity"></activity>
     </application>
 
 </manifest>
